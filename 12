@@ -1,0 +1,9 @@
+#include <iomanip>
+#include <iostream>
+#include <string>
+using namespace std;
+class Person { protected: string name; int age{}; public: void getPerson(){cin>>name>>age;} };
+class Academic { protected: int rollNumber{}; double marks[3]{}; public: void getAcademic(){cin>>rollNumber>>marks[0]>>marks[1]>>marks[2];} };
+class Student: public Person, public Academic { public: void input(){getPerson();getAcademic();} void display() const {double total=marks[0]+marks[1]+marks[2]; cout<<name<<" "<<age<<" "<<rollNumber<<" "<<total<<" "<<fixed<<setprecision(2)<<total/3.0<<'\n';} };
+int main(){Student s;s.input();s.display();}
+

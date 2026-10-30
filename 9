@@ -1,0 +1,14 @@
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+struct IdSort {}; struct SalarySort {};
+class Employee {
+public:
+    string name; int employeeId{}; double salary{};
+    static void sort(vector<Employee>& v, IdSort) { std::sort(v.begin(),v.end(),[](const Employee&a,const Employee&b){return a.employeeId<b.employeeId;}); }
+    static void sort(vector<Employee>& v, SalarySort) { std::sort(v.begin(),v.end(),[](const Employee&a,const Employee&b){return a.salary>b.salary;}); }
+};
+int main() { int n; cin >> n; vector<Employee> v(n); for(auto&e:v) cin>>e.name>>e.employeeId>>e.salary; Employee::sort(v,IdSort{}); for(const auto&e:v) cout<<e.name<<" "<<e.employeeId<<" "<<e.salary<<'\n'; cout<<"---\n"; Employee::sort(v,SalarySort{}); for(const auto&e:v) cout<<e.name<<" "<<e.employeeId<<" "<<e.salary<<'\n'; }
+

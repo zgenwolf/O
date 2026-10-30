@@ -1,0 +1,6 @@
+#include <iostream>
+using namespace std;
+class Number { int value{}; public: Number(int v=0):value(v){} Number& operator--(){value-=100;return *this;} friend Number operator--(Number& n,int); int get()const{return value;} };
+Number operator--(Number& n,int){Number old=n;n.value-=100;return old;}
+int main(){int v;cin>>v;Number n(v);--n;n--;cout<<n.get()<<'\n';}
+

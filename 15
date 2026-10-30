@@ -1,0 +1,6 @@
+#include <iomanip>
+#include <iostream>
+using namespace std;
+class Time { int hours{}, minutes{}; void normalize(){hours += minutes/60; minutes%=60; if(minutes<0){minutes+=60;--hours;}} public: friend istream& operator>>(istream& in,Time& t){in>>t.hours>>t.minutes;t.normalize();return in;} friend ostream& operator<<(ostream& out,const Time& t){return out<<setfill('0')<<setw(2)<<t.hours<<":"<<setw(2)<<t.minutes;} };
+int main(){Time t;cin>>t;cout<<t<<'\n';}
+

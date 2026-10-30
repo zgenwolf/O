@@ -1,0 +1,8 @@
+#include <iostream>
+#include <string>
+using namespace std;
+class BasicDetails { protected: string name; int age{}; public: void getBasicDetails(){cin>>name>>age;} };
+class Work { protected: int empid{}; string department; public: void getWorkDetails(){cin>>empid>>department;} };
+class Employee: public BasicDetails, public Work { public: void input(){getBasicDetails();getWorkDetails();} void display() const {cout<<name<<" "<<age<<" "<<empid<<" "<<department<<'\n';} };
+int main(){Employee e;e.input();e.display();}
+

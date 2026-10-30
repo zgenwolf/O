@@ -1,0 +1,14 @@
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+struct HeightSort {}; struct AgeSort {};
+class Person {
+public:
+    string name; int age{}; double height{};
+    static void sort(vector<Person>& v, HeightSort) { std::sort(v.begin(),v.end(),[](const Person&a,const Person&b){return a.height<b.height;}); }
+    static void sort(vector<Person>& v, AgeSort) { std::sort(v.begin(),v.end(),[](const Person&a,const Person&b){return a.age>b.age;}); }
+};
+int main() { int n; cin >> n; vector<Person> v(n); for(auto&p:v) cin>>p.name>>p.age>>p.height; Person::sort(v,HeightSort{}); for(const auto&p:v) cout<<p.name<<" "<<p.age<<" "<<p.height<<'\n'; cout<<"---\n"; Person::sort(v,AgeSort{}); for(const auto&p:v) cout<<p.name<<" "<<p.age<<" "<<p.height<<'\n'; }
+

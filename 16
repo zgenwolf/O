@@ -1,0 +1,6 @@
+#include <iostream>
+#include <string>
+using namespace std;
+class HospitalPatient { int patientId{}, age{}, wardNumber{}; string name; public: friend istream& operator>>(istream& in,HospitalPatient& p){in>>p.patientId>>p.name>>p.age>>p.wardNumber;return in;} friend ostream& operator<<(ostream& out,const HospitalPatient& p){return out<<"Patient ID: "<<p.patientId<<"\nName: "<<p.name<<"\nAge: "<<p.age<<"\nWard Number: "<<p.wardNumber; } };
+int main(){HospitalPatient p;cin>>p;cout<<p<<'\n';}
+

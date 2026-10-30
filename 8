@@ -1,0 +1,14 @@
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+struct NameSort {}; struct MarksSort {};
+class Student {
+public:
+    string name; double marks{};
+    static void sort(vector<Student>& v, NameSort) { std::sort(v.begin(),v.end(),[](const Student&a,const Student&b){return a.name<b.name;}); }
+    static void sort(vector<Student>& v, MarksSort) { std::sort(v.begin(),v.end(),[](const Student&a,const Student&b){return a.marks>b.marks;}); }
+};
+int main() { int n; cin >> n; vector<Student> v(n); for(auto& s:v) cin >> s.name >> s.marks; Student::sort(v,NameSort{}); for(const auto&s:v) cout<<s.name<<" "<<s.marks<<'\n'; cout<<"---\n"; Student::sort(v,MarksSort{}); for(const auto&s:v) cout<<s.name<<" "<<s.marks<<'\n'; }
+

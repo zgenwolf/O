@@ -1,0 +1,6 @@
+#include <iostream>
+using namespace std;
+class Square { double length, width; public: Square(): length(1),width(1) {} Square(double l,double w): length(l),width(w) {} double area() const { return length*width; } };
+class Circle { double radius; public: Circle(): radius(1) {} Circle(double r): radius(r) {} double area() const { return 3.14159265358979323846*radius*radius; } };
+int main() { double l,w,radius; cin >> l >> w >> radius; Square s(l,w); Circle c(radius); cout << s.area() << '\n' << c.area() << '\n'; }
+

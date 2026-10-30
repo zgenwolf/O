@@ -1,0 +1,14 @@
+#include <iostream>
+#include <string>
+using namespace std;
+class CollegeAdmission {
+    string name;
+    int age{};
+    double percentage{};
+public:
+    void addDetails() { cin >> name >> age >> percentage; }
+    bool checkEligibility() const { return age >= 17 && percentage >= 50.0; }
+    void displayDetails() const { cout << name << " " << age << " " << percentage << " " << (checkEligibility() ? "Eligible" : "Not Eligible") << '\n'; }
+};
+int main() { CollegeAdmission s; s.addDetails(); s.displayDetails(); }
+

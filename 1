@@ -1,0 +1,15 @@
+#include <iostream>
+#include <string>
+using namespace std;
+class BankAccount {
+    string name, type;
+    long long accountNumber{};
+    double balance{};
+public:
+    void assignInitialValues() { cin >> name >> accountNumber >> type >> balance; }
+    void deposit(double amount) { if (amount > 0) balance += amount; }
+    bool withdraw(double amount) { if (amount > 0 && amount <= balance) { balance -= amount; return true; } return false; }
+    void display() const { cout << name << " " << balance << '\n'; }
+};
+int main() { BankAccount a; a.assignInitialValues(); double deposit, withdrawal; cin >> deposit >> withdrawal; a.deposit(deposit); a.withdraw(withdrawal); a.display(); }
+
