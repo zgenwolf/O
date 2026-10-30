@@ -1,15 +1,54 @@
+// Problem 2: Bank account class - Program Defined Input
 #include <iostream>
 #include <string>
+#include <iomanip>
 using namespace std;
-class BankAccount {
-    string name = "Alice", type = "Savings";
-    long long accountNumber = 1001;
-    double balance = 5000;
-public:
-    void assignInitialValues() { name = "Alice"; accountNumber = 1001; type = "Savings"; balance = 5000; }
-    void deposit(double amount) { if (amount > 0) balance += amount; }
-    bool withdraw(double amount) { if (amount > 0 && amount <= balance) { balance -= amount; return true; } return false; }
-    void display() const { cout << name << " " << balance << '\n'; }
-};
-int main() { BankAccount a; a.assignInitialValues(); a.deposit(1500); a.withdraw(2000); a.display(); }
 
+class BankAccount {
+    string name;
+    long accountNumber;
+    string accountType;
+    double balance;
+public:
+    BankAccount() : name(""), accountNumber(0), accountType(""), balance(0.0) {}
+
+    void assign(const string& n, long accNo, const string& type, double bal) {
+        name = n; accountNumber = accNo; accountType = type; balance = bal;
+    }
+    void deposit(double amount) {
+        if (amount <= 0) { cout << "Invalid amount. Deposit must be positive.\n"; return; }
+        balance += amount;
+        cout << "Deposited " << amount << " successfully.\n";
+    }
+    void withdraw(double amount) {
+        if (amount <= 0)            cout << "Invalid amount. Withdrawal must be positive.\n";
+        else if (amount > balance)  cout << "Insufficient balance! Available: " << balance << "\n";
+        else { balance -= amount;   cout << "Withdrawn " << amount << " successfully.\n"; }
+    }
+    void display() const {
+        cout << fixed << setprecision(2);
+        cout << "Depositor Name : " << name << "\n";
+        cout << "Balance Amount : " << balance << "\n";
+    }
+};
+
+int main() {
+    BankAccount acc;
+    acc.assign("Rahul Sharma", 1001234567L, "Savings", 5000.0);
+
+    cout << "Initial details:\n";
+    acc.display();
+
+    cout << "\nDepositing 2500...\n";
+    acc.deposit(2500);
+    acc.display();
+
+    cout << "\nWithdrawing 3000...\n";
+    acc.withdraw(3000);
+    acc.display();
+
+    cout << "\nWithdrawing 10000 (more than balance)...\n";
+    acc.withdraw(10000);
+    acc.display();
+    return 0;
+}

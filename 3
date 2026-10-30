@@ -1,14 +1,54 @@
+// Problem 3: College admission - User Input
+// Eligibility rule used: age >= 17 AND percentage >= 60
 #include <iostream>
 #include <string>
+#include <limits>
+#include <iomanip>
 using namespace std;
-class CollegeAdmission {
-    string name;
-    int age{};
-    double percentage{};
-public:
-    void addDetails() { cin >> name >> age >> percentage; }
-    bool checkEligibility() const { return age >= 17 && percentage >= 50.0; }
-    void displayDetails() const { cout << name << " " << age << " " << percentage << " " << (checkEligibility() ? "Eligible" : "Not Eligible") << '\n'; }
-};
-int main() { CollegeAdmission s; s.addDetails(); s.displayDetails(); }
 
+class Admission {
+    string name;
+    int age;
+    double percentage;
+public:
+    Admission() : name(""), age(0), percentage(0.0) {}
+
+    void addDetails() {
+        cout << "Enter student name: ";
+        getline(cin, name);
+        cout << "Enter age: ";
+        cin >> age;
+        cout << "Enter percentage: ";
+        cin >> percentage;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    bool isEligible() const { return age >= 17 && percentage >= 60.0; }
+
+    void display() const {
+        cout << fixed << setprecision(2);
+        cout << "Name       : " << name << "\n";
+        cout << "Age        : " << age << "\n";
+        cout << "Percentage : " << percentage << "%\n";
+        cout << "Status     : " << (isEligible() ? "ELIGIBLE for admission" : "NOT ELIGIBLE for admission") << "\n";
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter number of students: ";
+    cin >> n;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    Admission* students = new Admission[n];
+    for (int i = 0; i < n; i++) {
+        cout << "\n--- Student " << i + 1 << " ---\n";
+        students[i].addDetails();
+    }
+    cout << "\n===== ADMISSION RESULTS =====\n";
+    for (int i = 0; i < n; i++) {
+        cout << "\nStudent " << i + 1 << ":\n";
+        students[i].display();
+    }
+    delete[] students;
+    return 0;
+}

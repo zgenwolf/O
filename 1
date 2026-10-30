@@ -1,15 +1,67 @@
+// Problem 1: Bank account class - User Input
 #include <iostream>
 #include <string>
+#include <limits>
+#include <iomanip>
 using namespace std;
-class BankAccount {
-    string name, type;
-    long long accountNumber{};
-    double balance{};
-public:
-    void assignInitialValues() { cin >> name >> accountNumber >> type >> balance; }
-    void deposit(double amount) { if (amount > 0) balance += amount; }
-    bool withdraw(double amount) { if (amount > 0 && amount <= balance) { balance -= amount; return true; } return false; }
-    void display() const { cout << name << " " << balance << '\n'; }
-};
-int main() { BankAccount a; a.assignInitialValues(); double deposit, withdrawal; cin >> deposit >> withdrawal; a.deposit(deposit); a.withdraw(withdrawal); a.display(); }
 
+class BankAccount {
+    string name;
+    long accountNumber;
+    string accountType;
+    double balance;
+public:
+    BankAccount() : name(""), accountNumber(0), accountType(""), balance(0.0) {}
+
+    void assign(const string& n, long accNo, const string& type, double bal) {
+        name = n; accountNumber = accNo; accountType = type; balance = bal;
+    }
+    void deposit(double amount) {
+        if (amount <= 0) { cout << "Invalid amount. Deposit must be positive.\n"; return; }
+        balance += amount;
+        cout << "Deposited " << amount << " successfully.\n";
+    }
+    void withdraw(double amount) {
+        if (amount <= 0)            cout << "Invalid amount. Withdrawal must be positive.\n";
+        else if (amount > balance)  cout << "Insufficient balance! Available: " << balance << "\n";
+        else { balance -= amount;   cout << "Withdrawn " << amount << " successfully.\n"; }
+    }
+    void display() const {
+        cout << fixed << setprecision(2);
+        cout << "Depositor Name : " << name << "\n";
+        cout << "Balance Amount : " << balance << "\n";
+    }
+};
+
+int main() {
+    string name, type;
+    long accNo;
+    double bal;
+
+    cout << "Enter depositor name: ";
+    getline(cin, name);
+    cout << "Enter account number: ";
+    cin >> accNo;
+    cout << "Enter account type (Savings/Current): ";
+    cin >> type;
+    cout << "Enter initial balance: ";
+    cin >> bal;
+
+    BankAccount acc;
+    acc.assign(name, accNo, type, bal);
+
+    int choice;
+    do {
+        cout << "\n--- MENU ---\n1. Deposit\n2. Withdraw\n3. Display\n4. Exit\nChoice: ";
+        cin >> choice;
+        double amt;
+        switch (choice) {
+            case 1: cout << "Enter amount to deposit: ";  cin >> amt; acc.deposit(amt);  break;
+            case 2: cout << "Enter amount to withdraw: "; cin >> amt; acc.withdraw(amt); break;
+            case 3: acc.display(); break;
+            case 4: cout << "Thank you!\n"; break;
+            default: cout << "Invalid choice.\n";
+        }
+    } while (choice != 4 && cin);
+    return 0;
+}

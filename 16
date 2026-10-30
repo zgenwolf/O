@@ -1,6 +1,55 @@
+// Problem 16: HospitalPatient class with overloaded >> and <<
 #include <iostream>
 #include <string>
+#include <limits>
+#include <iomanip>
 using namespace std;
-class HospitalPatient { int patientId{}, age{}, wardNumber{}; string name; public: friend istream& operator>>(istream& in,HospitalPatient& p){in>>p.patientId>>p.name>>p.age>>p.wardNumber;return in;} friend ostream& operator<<(ostream& out,const HospitalPatient& p){return out<<"Patient ID: "<<p.patientId<<"\nName: "<<p.name<<"\nAge: "<<p.age<<"\nWard Number: "<<p.wardNumber; } };
-int main(){HospitalPatient p;cin>>p;cout<<p<<'\n';}
 
+class HospitalPatient {
+    int patientId;
+    string name;
+    int age;
+    int wardNumber;
+public:
+    HospitalPatient() : patientId(0), name(""), age(0), wardNumber(0) {}
+
+    friend istream& operator>>(istream& in, HospitalPatient& p) {
+        cout << "Enter patient ID: ";
+        in >> p.patientId;
+        in.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Enter patient name: ";
+        getline(in, p.name);
+        cout << "Enter age: ";
+        in >> p.age;
+        cout << "Enter ward number: ";
+        in >> p.wardNumber;
+        in.ignore(numeric_limits<streamsize>::max(), '\n');
+        return in;
+    }
+    friend ostream& operator<<(ostream& out, const HospitalPatient& p) {
+        out << "-------------------------------\n"
+            << "Patient ID  : " << p.patientId  << "\n"
+            << "Name        : " << p.name       << "\n"
+            << "Age         : " << p.age        << "\n"
+            << "Ward Number : " << p.wardNumber << "\n"
+            << "-------------------------------";
+        return out;
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter number of patients: ";
+    cin >> n;
+
+    HospitalPatient* p = new HospitalPatient[n];
+    for (int i = 0; i < n; i++) {
+        cout << "\n--- Patient " << i + 1 << " ---\n";
+        cin >> p[i];
+    }
+    cout << "\n===== PATIENT RECORDS =====\n";
+    for (int i = 0; i < n; i++)
+        cout << p[i] << "\n";
+    delete[] p;
+    return 0;
+}

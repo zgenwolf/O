@@ -1,8 +1,75 @@
+// Problem 11: Employee database using multiple inheritance
 #include <iostream>
 #include <string>
+#include <limits>
 using namespace std;
-class BasicDetails { protected: string name; int age{}; public: void getBasicDetails(){cin>>name>>age;} };
-class Work { protected: int empid{}; string department; public: void getWorkDetails(){cin>>empid>>department;} };
-class Employee: public BasicDetails, public Work { public: void input(){getBasicDetails();getWorkDetails();} void display() const {cout<<name<<" "<<age<<" "<<empid<<" "<<department<<'\n';} };
-int main(){Employee e;e.input();e.display();}
 
+class BasicDetails {
+protected:
+    string name;
+    int age;
+public:
+    BasicDetails() : name(""), age(0) {}
+    void getBasicDetails() {
+        cout << "Enter name: ";
+        getline(cin, name);
+        cout << "Enter age: ";
+        cin >> age;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    void showBasicDetails() const {
+        cout << "Name       : " << name << "\n";
+        cout << "Age        : " << age << "\n";
+    }
+};
+
+class Work {
+protected:
+    int empId;
+    string department;
+public:
+    Work() : empId(0), department("") {}
+    void getWorkDetails() {
+        cout << "Enter employee ID: ";
+        cin >> empId;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Enter department: ";
+        getline(cin, department);
+    }
+    void showWorkDetails() const {
+        cout << "Employee ID: " << empId << "\n";
+        cout << "Department : " << department << "\n";
+    }
+};
+
+class Employee : public BasicDetails, public Work {
+public:
+    void input() {
+        getBasicDetails();
+        getWorkDetails();
+    }
+    void display() const {
+        showBasicDetails();
+        showWorkDetails();
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter number of employees: ";
+    cin >> n;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    Employee* e = new Employee[n];
+    for (int i = 0; i < n; i++) {
+        cout << "\n--- Employee " << i + 1 << " ---\n";
+        e[i].input();
+    }
+    cout << "\n===== EMPLOYEE DATABASE =====\n";
+    for (int i = 0; i < n; i++) {
+        cout << "\nEmployee " << i + 1 << ":\n";
+        e[i].display();
+    }
+    delete[] e;
+    return 0;
+}

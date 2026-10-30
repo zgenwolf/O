@@ -1,6 +1,66 @@
+// Problem 13: Overload ++ to increment data member by 100
+//   (a) using a member function   (b) using a friend function
 #include <iostream>
 using namespace std;
-class Number { int value{}; public: Number(int v=0):value(v){} Number& operator++(){value+=100;return *this;} friend Number operator++(Number& n,int); int get()const{return value;} };
-Number operator++(Number& n,int){Number old=n;n.value+=100;return old;}
-int main(){int v;cin>>v;Number n(v);++n;n++;cout<<n.get()<<'\n';}
 
+// ---------- (a) Member function ----------
+class MemberCounter {
+    int value;
+public:
+    MemberCounter(int v = 0) : value(v) {}
+    void input() { cout << "Enter value: "; cin >> value; }
+
+    MemberCounter& operator++() {            // prefix  ++obj
+        value += 100;
+        return *this;
+    }
+    MemberCounter operator++(int) {          // postfix obj++
+        MemberCounter old = *this;
+        value += 100;
+        return old;
+    }
+    void display() const { cout << "Value = " << value << "\n"; }
+};
+
+// ---------- (b) Friend function ----------
+class FriendCounter {
+    int value;
+public:
+    FriendCounter(int v = 0) : value(v) {}
+    void input() { cout << "Enter value: "; cin >> value; }
+    void display() const { cout << "Value = " << value << "\n"; }
+
+    friend FriendCounter& operator++(FriendCounter& c);       // prefix
+    friend FriendCounter  operator++(FriendCounter& c, int);  // postfix
+};
+
+FriendCounter& operator++(FriendCounter& c) {
+    c.value += 100;
+    return c;
+}
+FriendCounter operator++(FriendCounter& c, int) {
+    FriendCounter old = c;
+    c.value += 100;
+    return old;
+}
+
+int main() {
+    cout << "=== Increment using MEMBER function ===\n";
+    MemberCounter m;
+    m.input();
+    cout << "Before: "; m.display();
+    ++m;
+    cout << "After prefix ++m : "; m.display();
+    m++;
+    cout << "After postfix m++: "; m.display();
+
+    cout << "\n=== Increment using FRIEND function ===\n";
+    FriendCounter f;
+    f.input();
+    cout << "Before: "; f.display();
+    ++f;
+    cout << "After prefix ++f : "; f.display();
+    f++;
+    cout << "After postfix f++: "; f.display();
+    return 0;
+}

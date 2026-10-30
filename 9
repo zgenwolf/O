@@ -1,14 +1,72 @@
-#include <algorithm>
+// Problem 9: Employee class with overloaded sort()
+//   a. By Employee ID (ascending)   b. By Salary (descending)
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <limits>
+#include <iomanip>
 using namespace std;
-struct IdSort {}; struct SalarySort {};
-class Employee {
-public:
-    string name; int employeeId{}; double salary{};
-    static void sort(vector<Employee>& v, IdSort) { std::sort(v.begin(),v.end(),[](const Employee&a,const Employee&b){return a.employeeId<b.employeeId;}); }
-    static void sort(vector<Employee>& v, SalarySort) { std::sort(v.begin(),v.end(),[](const Employee&a,const Employee&b){return a.salary>b.salary;}); }
-};
-int main() { int n; cin >> n; vector<Employee> v(n); for(auto&e:v) cin>>e.name>>e.employeeId>>e.salary; Employee::sort(v,IdSort{}); for(const auto&e:v) cout<<e.name<<" "<<e.employeeId<<" "<<e.salary<<'\n'; cout<<"---\n"; Employee::sort(v,SalarySort{}); for(const auto&e:v) cout<<e.name<<" "<<e.employeeId<<" "<<e.salary<<'\n'; }
 
+struct ById     {};   // tag types used to overload sort()
+struct BySalary {};
+
+class Employee {
+    string name;
+    int empId;
+    double salary;
+public:
+    Employee() : name(""), empId(0), salary(0) {}
+
+    void input() {
+        cout << "Enter name: ";
+        getline(cin, name);
+        cout << "Enter employee ID: ";
+        cin >> empId;
+        cout << "Enter salary: ";
+        cin >> salary;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    void display() const {
+        cout << left << setw(20) << name << setw(8) << empId
+             << right << setw(12) << fixed << setprecision(2) << salary << "\n";
+    }
+
+    static void sort(vector<Employee>& v, ById) {
+        std::sort(v.begin(), v.end(), [](const Employee& a, const Employee& b) {
+            return a.empId < b.empId;
+        });
+    }
+    static void sort(vector<Employee>& v, BySalary) {
+        std::sort(v.begin(), v.end(), [](const Employee& a, const Employee& b) {
+            return a.salary > b.salary;
+        });
+    }
+};
+
+void show(const vector<Employee>& v, const string& title) {
+    cout << "\n" << title << "\n";
+    cout << left << setw(20) << "Name" << setw(8) << "ID" << right << setw(12) << "Salary" << "\n";
+    cout << string(40, '-') << "\n";
+    for (const auto& e : v) e.display();
+}
+
+int main() {
+    int n;
+    cout << "Enter number of employees: ";
+    cin >> n;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    vector<Employee> emp(n);
+    for (int i = 0; i < n; i++) {
+        cout << "\n--- Employee " << i + 1 << " ---\n";
+        emp[i].input();
+    }
+
+    Employee::sort(emp, ById());
+    show(emp, "Sorted by Employee ID (Ascending):");
+
+    Employee::sort(emp, BySalary());
+    show(emp, "Sorted by Salary (Descending):");
+    return 0;
+}

@@ -1,6 +1,38 @@
-#include <iomanip>
+// Problem 15: Time class with overloaded >> and <<
 #include <iostream>
+#include <iomanip>
 using namespace std;
-class Time { int hours{}, minutes{}; void normalize(){hours += minutes/60; minutes%=60; if(minutes<0){minutes+=60;--hours;}} public: friend istream& operator>>(istream& in,Time& t){in>>t.hours>>t.minutes;t.normalize();return in;} friend ostream& operator<<(ostream& out,const Time& t){return out<<setfill('0')<<setw(2)<<t.hours<<":"<<setw(2)<<t.minutes;} };
-int main(){Time t;cin>>t;cout<<t<<'\n';}
 
+class Time {
+    int hours, minutes;
+
+    void normalize() {              // e.g. 1h 75m -> 2h 15m
+        if (minutes < 0) minutes = 0;
+        if (hours < 0)   hours = 0;
+        hours  += minutes / 60;
+        minutes = minutes % 60;
+    }
+public:
+    Time(int h = 0, int m = 0) : hours(h), minutes(m) { normalize(); }
+
+    friend istream& operator>>(istream& in, Time& t) {
+        cout << "Enter hours: ";
+        in >> t.hours;
+        cout << "Enter minutes: ";
+        in >> t.minutes;
+        t.normalize();
+        return in;
+    }
+    friend ostream& operator<<(ostream& out, const Time& t) {
+        out << setfill('0') << setw(2) << t.hours << ":"
+            << setfill('0') << setw(2) << t.minutes << setfill(' ');
+        return out;
+    }
+};
+
+int main() {
+    Time t;
+    cin >> t;
+    cout << "Time (hh:mm) = " << t << "\n";
+    return 0;
+}

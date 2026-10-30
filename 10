@@ -1,14 +1,72 @@
-#include <algorithm>
+// Problem 10: Person class with overloaded sort()
+//   a. By Height (ascending)   b. By Age (descending)
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <limits>
+#include <iomanip>
 using namespace std;
-struct HeightSort {}; struct AgeSort {};
-class Person {
-public:
-    string name; int age{}; double height{};
-    static void sort(vector<Person>& v, HeightSort) { std::sort(v.begin(),v.end(),[](const Person&a,const Person&b){return a.height<b.height;}); }
-    static void sort(vector<Person>& v, AgeSort) { std::sort(v.begin(),v.end(),[](const Person&a,const Person&b){return a.age>b.age;}); }
-};
-int main() { int n; cin >> n; vector<Person> v(n); for(auto&p:v) cin>>p.name>>p.age>>p.height; Person::sort(v,HeightSort{}); for(const auto&p:v) cout<<p.name<<" "<<p.age<<" "<<p.height<<'\n'; cout<<"---\n"; Person::sort(v,AgeSort{}); for(const auto&p:v) cout<<p.name<<" "<<p.age<<" "<<p.height<<'\n'; }
 
+struct ByHeight {};   // tag types used to overload sort()
+struct ByAge    {};
+
+class Person {
+    string name;
+    int age;
+    double height;
+public:
+    Person() : name(""), age(0), height(0) {}
+
+    void input() {
+        cout << "Enter name: ";
+        getline(cin, name);
+        cout << "Enter age: ";
+        cin >> age;
+        cout << "Enter height (cm): ";
+        cin >> height;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    void display() const {
+        cout << left << setw(20) << name << setw(8) << age
+             << right << setw(10) << fixed << setprecision(1) << height << "\n";
+    }
+
+    static void sort(vector<Person>& v, ByHeight) {
+        std::sort(v.begin(), v.end(), [](const Person& a, const Person& b) {
+            return a.height < b.height;
+        });
+    }
+    static void sort(vector<Person>& v, ByAge) {
+        std::sort(v.begin(), v.end(), [](const Person& a, const Person& b) {
+            return a.age > b.age;
+        });
+    }
+};
+
+void show(const vector<Person>& v, const string& title) {
+    cout << "\n" << title << "\n";
+    cout << left << setw(20) << "Name" << setw(8) << "Age" << right << setw(10) << "Height" << "\n";
+    cout << string(38, '-') << "\n";
+    for (const auto& p : v) p.display();
+}
+
+int main() {
+    int n;
+    cout << "Enter number of persons: ";
+    cin >> n;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    vector<Person> people(n);
+    for (int i = 0; i < n; i++) {
+        cout << "\n--- Person " << i + 1 << " ---\n";
+        people[i].input();
+    }
+
+    Person::sort(people, ByHeight());
+    show(people, "Sorted by Height (Ascending):");
+
+    Person::sort(people, ByAge());
+    show(people, "Sorted by Age (Descending):");
+    return 0;
+}

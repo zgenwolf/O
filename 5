@@ -1,6 +1,40 @@
+// Problem 5: Rectangle and Triangle with constructors - User Input
 #include <iostream>
 using namespace std;
-class Rectangle { double length, width; public: Rectangle(): length(1), width(1) {} Rectangle(double l,double w): length(l),width(w) {} double area() const { return length*width; } };
-class Triangle { double base, height; public: Triangle(): base(1),height(1) {} Triangle(double b,double h): base(b),height(h) {} double area() const { return 0.5*base*height; } };
-int main() { double l,w,b,h; cin >> l >> w >> b >> h; Rectangle r(l,w); Triangle t(b,h); cout << r.area() << '\n' << t.area() << '\n'; }
 
+class Rectangle {
+    double length, width;
+public:
+    Rectangle() : length(1), width(1) {}
+    Rectangle(double l, double w) : length(l), width(w) {}
+    double area() const { return length * width; }
+};
+
+class Triangle {
+    double base, height;
+public:
+    Triangle() : base(1), height(1) {}
+    Triangle(double b, double h) : base(b), height(h) {}
+    double area() const { return 0.5 * base * height; }
+};
+
+int main() {
+    // Rectangle
+    Rectangle r1;
+    cout << "Rectangle (default 1 x 1) area = " << r1.area() << "\n";
+    double l, w;
+    cout << "Enter length and width of rectangle: ";
+    cin >> l >> w;
+    Rectangle r2(l, w);
+    cout << "Rectangle area = " << r2.area() << "\n\n";
+
+    // Triangle
+    Triangle t1;
+    cout << "Triangle (default base 1, height 1) area = " << t1.area() << "\n";
+    double b, h;
+    cout << "Enter base and height of triangle: ";
+    cin >> b >> h;
+    Triangle t2(b, h);
+    cout << "Triangle area = " << t2.area() << "\n";
+    return 0;
+}

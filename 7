@@ -1,6 +1,40 @@
+// Problem 7: Rectangle and Square with constructors - User Input
 #include <iostream>
 using namespace std;
-class Rectangle { double length, width; public: Rectangle(): length(1),width(1) {} Rectangle(double l,double w): length(l),width(w) {} double area() const { return length*width; } };
-class Square { double length, width; public: Square(): length(1),width(1) {} Square(double l,double w): length(l),width(w) {} double area() const { return length*width; } };
-int main() { double rl,rw,sl,sw; cin >> rl >> rw >> sl >> sw; Rectangle r(rl,rw); Square s(sl,sw); cout << r.area() << '\n' << s.area() << '\n'; }
 
+class Rectangle {
+    double length, width;
+public:
+    Rectangle() : length(1), width(1) {}
+    Rectangle(double l, double w) : length(l), width(w) {}
+    double area() const { return length * width; }
+};
+
+class Square {
+    double length, width;
+public:
+    Square() : length(1), width(1) {}
+    Square(double l) : length(l), width(l) {}
+    double area() const { return length * width; }
+};
+
+int main() {
+    // Rectangle
+    Rectangle r1;
+    cout << "Rectangle (default 1 x 1) area = " << r1.area() << "\n";
+    double l, w;
+    cout << "Enter length and width of rectangle: ";
+    cin >> l >> w;
+    Rectangle r2(l, w);
+    cout << "Rectangle area = " << r2.area() << "\n\n";
+
+    // Square
+    Square s1;
+    cout << "Square (default side 1) area = " << s1.area() << "\n";
+    double side;
+    cout << "Enter side of square: ";
+    cin >> side;
+    Square s2(side);
+    cout << "Square area = " << s2.area() << "\n";
+    return 0;
+}

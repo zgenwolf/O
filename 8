@@ -1,14 +1,75 @@
-#include <algorithm>
+// Problem 8: Student class with overloaded sort()
+//   a. By name (alphabetical)   b. By marks (descending)
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <cctype>
+#include <limits>
+#include <iomanip>
 using namespace std;
-struct NameSort {}; struct MarksSort {};
-class Student {
-public:
-    string name; double marks{};
-    static void sort(vector<Student>& v, NameSort) { std::sort(v.begin(),v.end(),[](const Student&a,const Student&b){return a.name<b.name;}); }
-    static void sort(vector<Student>& v, MarksSort) { std::sort(v.begin(),v.end(),[](const Student&a,const Student&b){return a.marks>b.marks;}); }
-};
-int main() { int n; cin >> n; vector<Student> v(n); for(auto& s:v) cin >> s.name >> s.marks; Student::sort(v,NameSort{}); for(const auto&s:v) cout<<s.name<<" "<<s.marks<<'\n'; cout<<"---\n"; Student::sort(v,MarksSort{}); for(const auto&s:v) cout<<s.name<<" "<<s.marks<<'\n'; }
 
+struct ByName  {};   // tag types used to overload sort()
+struct ByMarks {};
+
+class Student {
+    string name;
+    double marks;
+
+    static string lower(string s) {
+        for (char& c : s) c = (char)tolower((unsigned char)c);
+        return s;
+    }
+public:
+    Student() : name(""), marks(0) {}
+
+    void input() {
+        cout << "Enter name: ";
+        getline(cin, name);
+        cout << "Enter marks: ";
+        cin >> marks;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    void display() const {
+        cout << left << setw(20) << name << right << setw(8) << fixed << setprecision(2) << marks << "\n";
+    }
+
+    // Overloaded sort functions
+    static void sort(vector<Student>& v, ByName) {
+        std::sort(v.begin(), v.end(), [](const Student& a, const Student& b) {
+            return lower(a.name) < lower(b.name);
+        });
+    }
+    static void sort(vector<Student>& v, ByMarks) {
+        std::sort(v.begin(), v.end(), [](const Student& a, const Student& b) {
+            return a.marks > b.marks;
+        });
+    }
+};
+
+void show(const vector<Student>& v, const string& title) {
+    cout << "\n" << title << "\n";
+    cout << left << setw(20) << "Name" << right << setw(8) << "Marks" << "\n";
+    cout << string(28, '-') << "\n";
+    for (const auto& s : v) s.display();
+}
+
+int main() {
+    int n;
+    cout << "Enter number of students: ";
+    cin >> n;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    vector<Student> students(n);
+    for (int i = 0; i < n; i++) {
+        cout << "\n--- Student " << i + 1 << " ---\n";
+        students[i].input();
+    }
+
+    Student::sort(students, ByName());
+    show(students, "Sorted by Name (Alphabetical):");
+
+    Student::sort(students, ByMarks());
+    show(students, "Sorted by Marks (Descending):");
+    return 0;
+}

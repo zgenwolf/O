@@ -1,9 +1,89 @@
-#include <iomanip>
+// Problem 12: Student database using multiple inheritance
 #include <iostream>
 #include <string>
+#include <limits>
+#include <iomanip>
 using namespace std;
-class Person { protected: string name; int age{}; public: void getPerson(){cin>>name>>age;} };
-class Academic { protected: int rollNumber{}; double marks[3]{}; public: void getAcademic(){cin>>rollNumber>>marks[0]>>marks[1]>>marks[2];} };
-class Student: public Person, public Academic { public: void input(){getPerson();getAcademic();} void display() const {double total=marks[0]+marks[1]+marks[2]; cout<<name<<" "<<age<<" "<<rollNumber<<" "<<total<<" "<<fixed<<setprecision(2)<<total/3.0<<'\n';} };
-int main(){Student s;s.input();s.display();}
 
+class Person {
+protected:
+    string name;
+    int age;
+public:
+    Person() : name(""), age(0) {}
+    void getPersonDetails() {
+        cout << "Enter name: ";
+        getline(cin, name);
+        cout << "Enter age: ";
+        cin >> age;
+    }
+    void showPersonDetails() const {
+        cout << "Name        : " << name << "\n";
+        cout << "Age         : " << age << "\n";
+    }
+};
+
+class Academic {
+protected:
+    int rollNo;
+    double marks[3];
+public:
+    Academic() : rollNo(0) { for (int i = 0; i < 3; i++) marks[i] = 0; }
+    void getAcademicDetails() {
+        cout << "Enter roll number: ";
+        cin >> rollNo;
+        for (int i = 0; i < 3; i++) {
+            cout << "Enter marks in subject " << i + 1 << " (out of 100): ";
+            cin >> marks[i];
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    void showAcademicDetails() const {
+        cout << "Roll Number : " << rollNo << "\n";
+        for (int i = 0; i < 3; i++)
+            cout << "Subject " << i + 1 << "   : " << marks[i] << "\n";
+    }
+};
+
+class Student : public Person, public Academic {
+    double total, percentage;
+public:
+    Student() : total(0), percentage(0) {}
+
+    void input() {
+        getPersonDetails();
+        getAcademicDetails();
+        calculate();
+    }
+    void calculate() {
+        total = marks[0] + marks[1] + marks[2];
+        percentage = (total / 300.0) * 100.0;
+    }
+    void display() const {
+        showPersonDetails();
+        showAcademicDetails();
+        cout << fixed << setprecision(2);
+        cout << "Total Marks : " << total << " / 300\n";
+        cout << "Percentage  : " << percentage << "%\n";
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter number of students: ";
+    cin >> n;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    Student* s = new Student[n];
+    for (int i = 0; i < n; i++) {
+        cout << "\n--- Student " << i + 1 << " ---\n";
+        s[i].input();
+    }
+    cout << "\n===== STUDENT DATABASE =====\n";
+    for (int i = 0; i < n; i++) {
+        cout << "\nStudent " << i + 1 << ":\n";
+        s[i].display();
+    }
+    delete[] s;
+    return 0;
+}

@@ -1,14 +1,39 @@
+// Problem 4: College admission - Program Defined Input
+// Eligibility rule used: age >= 17 AND percentage >= 60
 #include <iostream>
 #include <string>
+#include <iomanip>
 using namespace std;
-class CollegeAdmission {
-    string name = "Aarav";
-    int age = 18;
-    double percentage = 72.5;
-public:
-    void addDetails() { name = "Aarav"; age = 18; percentage = 72.5; }
-    bool checkEligibility() const { return age >= 17 && percentage >= 50.0; }
-    void displayDetails() const { cout << name << " " << age << " " << percentage << " " << (checkEligibility() ? "Eligible" : "Not Eligible") << '\n'; }
-};
-int main() { CollegeAdmission s; s.addDetails(); s.displayDetails(); }
 
+class Admission {
+    string name;
+    int age;
+    double percentage;
+public:
+    Admission() : name(""), age(0), percentage(0.0) {}
+
+    void addDetails(const string& n, int a, double p) { name = n; age = a; percentage = p; }
+    bool isEligible() const { return age >= 17 && percentage >= 60.0; }
+
+    void display() const {
+        cout << fixed << setprecision(2);
+        cout << "Name       : " << name << "\n";
+        cout << "Age        : " << age << "\n";
+        cout << "Percentage : " << percentage << "%\n";
+        cout << "Status     : " << (isEligible() ? "ELIGIBLE for admission" : "NOT ELIGIBLE for admission") << "\n";
+    }
+};
+
+int main() {
+    Admission s[3];
+    s[0].addDetails("Anita Desai", 18, 82.5);
+    s[1].addDetails("Karan Mehta", 16, 90.0);   // too young
+    s[2].addDetails("Suresh Patil", 19, 45.0);  // low percentage
+
+    cout << "===== ADMISSION RESULTS =====\n";
+    for (int i = 0; i < 3; i++) {
+        cout << "\nStudent " << i + 1 << ":\n";
+        s[i].display();
+    }
+    return 0;
+}
