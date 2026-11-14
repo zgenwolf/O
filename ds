@@ -458,3 +458,203 @@ int main() {
     } while (ch != 0);
     return 0;
 }
+
+
+// ---------- Palindrome Using Stack ----------
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+
+#define MAX 100
+
+class Stack {
+    char arr[MAX];
+    int top;
+public:
+    Stack() { top = -1; }
+    bool isEmpty() { return top == -1; }
+    bool isFull() { return top == MAX - 1; }
+    void push(char c) { if (!isFull()) arr[++top] = c; }
+    char pop() { return isEmpty() ? '\0' : arr[top--]; }
+};
+
+string clean(const string &s) {
+    string r;
+    for (char c : s)
+        if (isalnum((unsigned char)c)) r += tolower(c);
+    return r;
+}
+
+void printReverse(const string &s) {
+    Stack st;
+    for (char c : s) st.push(c);
+    cout << "Original: " << s << endl;
+    cout << "Reversed: ";
+    while (!st.isEmpty()) cout << st.pop();
+    cout << endl;
+}
+
+bool isPalindrome(const string &s) {
+    string t = clean(s);
+    Stack st;
+    for (char c : t) st.push(c);
+    for (char c : t)
+        if (st.pop() != c) return false;
+    return true;
+}
+
+int main() {
+    string s;
+    cout << "Enter a string: ";
+    getline(cin, s);
+    printReverse(s);
+    cout << (isPalindrome(s) ? "Palindrome" : "Not a palindrome") << endl;
+    return 0;
+}
+
+
+// ---------- Pizza Parlour Circular Queue ----------
+#include <iostream>
+using namespace std;
+
+class PizzaQueue {
+    int *orders;
+    int front, rear, count, M;
+public:
+    PizzaQueue(int m) {
+        M = m; orders = new int[M];
+        front = 0; rear = -1; count = 0;
+    }
+    ~PizzaQueue() { delete[] orders; }
+    bool isFull()  { return count == M; }
+    bool isEmpty() { return count == 0; }
+
+    void placeOrder(int id) {
+        if (isFull()) { cout << "Parlour full! Cannot accept order.\n"; return; }
+        rear = (rear + 1) % M;
+        orders[rear] = id;
+        count++;
+        cout << "Order " << id << " placed.\n";
+    }
+    void serveOrder() {
+        if (isEmpty()) { cout << "No orders to serve.\n"; return; }
+        cout << "Order " << orders[front] << " served.\n";
+        front = (front + 1) % M;
+        count--;
+    }
+    void display() {
+        if (isEmpty()) { cout << "No pending orders.\n"; return; }
+        cout << "Pending orders: ";
+        for (int i = 0, j = front; i < count; i++, j = (j + 1) % M)
+            cout << orders[j] << " ";
+        cout << endl;
+    }
+};
+
+int main() {
+    int M, ch, id;
+    cout << "Enter max number of orders (M): ";
+    cin >> M;
+    PizzaQueue q(M);
+    do {
+        cout << "\n1.Place Order 2.Serve Order 3.Display 4.Exit\nChoice: ";
+        cin >> ch;
+        switch (ch) {
+            case 1: cout << "Order ID: "; cin >> id; q.placeOrder(id); break;
+            case 2: q.serveOrder(); break;
+            case 3: q.display(); break;
+            case 4: break;
+            default: cout << "Invalid choice\n";
+        }
+    } while (ch != 4);
+    return 0;
+}
+
+
+// ---------- Ice-cream Sets Using Linked List ----------
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int roll;
+    Node *next;
+    Node(int r) : roll(r), next(NULL) {}
+};
+
+class Set {
+public:
+    Node *head;
+    Set() { head = NULL; }
+
+    bool contains(int r) {
+        for (Node *p = head; p; p = p->next)
+            if (p->roll == r) return true;
+        return false;
+    }
+    void add(int r) {
+        if (contains(r)) return;
+        Node *n = new Node(r);
+        if (!head) head = n;
+        else { Node *p = head; while (p->next) p = p->next; p->next = n; }
+    }
+    int size() {
+        int c = 0;
+        for (Node *p = head; p; p = p->next) c++;
+        return c;
+    }
+    void display() {
+        if (!head) { cout << "(none)"; }
+        for (Node *p = head; p; p = p->next) cout << p->roll << " ";
+        cout << endl;
+    }
+};
+
+Set intersection(Set &A, Set &B) {
+    Set r;
+    for (Node *p = A.head; p; p = p->next)
+        if (B.contains(p->roll)) r.add(p->roll);
+    return r;
+}
+
+Set unionSet(Set &A, Set &B) {
+    Set r;
+    for (Node *p = A.head; p; p = p->next) r.add(p->roll);
+    for (Node *p = B.head; p; p = p->next) r.add(p->roll);
+    return r;
+}
+
+Set either(Set &A, Set &B) {
+    Set r;
+    for (Node *p = A.head; p; p = p->next)
+        if (!B.contains(p->roll)) r.add(p->roll);
+    for (Node *p = B.head; p; p = p->next)
+        if (!A.contains(p->roll)) r.add(p->roll);
+    return r;
+}
+
+int main() {
+    Set A, B;
+    int total, n, r;
+    cout << "Total students in class: ";
+    cin >> total;
+
+    cout << "Number of students who like Vanilla: ";
+    cin >> n;
+    cout << "Enter roll numbers: ";
+    while (n--) { cin >> r; A.add(r); }
+
+    cout << "Number of students who like Butterscotch: ";
+    cin >> n;
+    cout << "Enter roll numbers: ";
+    while (n--) { cin >> r; B.add(r); }
+
+    Set both = intersection(A, B);
+    Set one  = either(A, B);
+    Set uni  = unionSet(A, B);
+
+    cout << "\na) Like both: ";            both.display();
+    cout << "b) Like either, not both: "; one.display();
+    cout << "c) Like neither: " << total - uni.size() << endl;
+    return 0;
+}
