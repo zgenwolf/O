@@ -1,688 +1,812 @@
-// ---------- Exp 1: Reverse a Number ----------
+# 1. Reverse a Number
+
+```cpp
 #include <iostream>
-using namespace std;
-int main() {
-    long long num, rev = 0;
-    cout << "Enter an N-digit number: ";
-    cin >> num;
-    long long n = (num < 0) ? -num : num;
-    while (n > 0) {
-        rev = rev * 10 + n % 10;
-        n /= 10;
-    }
-    if (num < 0) rev = -rev;
-    cout << "Reverse = " << rev << endl;
-    return 0;
-}
-
-
-// ---------- Exp 2: Sum of Numbers on the Fly ----------
-#include <iostream>
-using namespace std;
-int main() {
-    double x, sum = 0;
-    cout << "Enter numbers one by one (type q to stop):\n";
-    while (cin >> x) sum += x;
-    cout << "Sum = " << sum << endl;
-    return 0;
-}
-
-
-// ---------- Exp 3: String Operations ----------
-#include <iostream>
-#include <sstream>
 #include <string>
-#include <map>
 using namespace std;
 
-void longestWord(const string &s) {
-    istringstream ss(s);
-    string w, best;
-    while (ss >> w) if (w.length() > best.length()) best = w;
-    cout << "Longest word: " << best << " (length " << best.length() << ")\n";
-}
-void charFrequency(const string &s, char c) {
-    int cnt = 0;
-    for (char ch : s) if (ch == c) cnt++;
-    cout << "Frequency of '" << c << "' = " << cnt << endl;
-}
-bool isPalindrome(const string &s) {
-    int i = 0, j = s.length() - 1;
-    while (i < j) if (s[i++] != s[j--]) return false;
-    return true;
-}
-int firstIndex(const string &s, const string &sub) {
-    int n = s.length(), m = sub.length();
-    for (int i = 0; i + m <= n; i++) {
-        int j = 0;
-        while (j < m && s[i + j] == sub[j]) j++;
-        if (j == m) return i;
-    }
-    return -1;
-}
-void wordCount(const string &s) {
-    map<string,int> mp;
-    istringstream ss(s);
-    string w;
-    while (ss >> w) mp[w]++;
-    for (auto &p : mp) cout << p.first << " : " << p.second << endl;
-}
-int main() {
-    string s, sub;
-    char c;
-    cout << "Enter a string: ";
-    getline(cin, s);
-    int ch;
-    do {
-        cout << "\n1.Longest word 2.Char frequency 3.Palindrome 4.Substring index 5.Word count 0.Exit\nChoice: ";
-        cin >> ch;
-        switch (ch) {
-            case 1: longestWord(s); break;
-            case 2: cout << "Enter character: "; cin >> c; charFrequency(s, c); break;
-            case 3: cout << (isPalindrome(s) ? "Palindrome\n" : "Not a palindrome\n"); break;
-            case 4: cout << "Enter substring: "; cin >> sub;
-                    { int idx = firstIndex(s, sub);
-                      if (idx == -1) cout << "Not found\n"; else cout << "First index = " << idx << endl; }
-                    break;
-            case 5: wordCount(s); break;
+class ReverseNumber {
+public:
+    int reverse(int number) {
+        int answer = 0;
+        while (number > 0) {
+            int digit = number % 10;
+            answer = answer * 10 + digit;
+            number = number / 10;
         }
-    } while (ch != 0);
+        return answer;
+    }
+};
+
+int main() {
+    int number;
+    cin >> number;
+    ReverseNumber r;
+    cout << r.reverse(number);
     return 0;
 }
+```
 
+# 2. Add Numbers Until Input Stops
 
-// ---------- Exp 4: Matrix Operations ----------
+```cpp
 #include <iostream>
+#include <string>
 using namespace std;
-const int MAX = 10;
 
-void read(int a[MAX][MAX], int r, int c, const char *name) {
-    cout << "Enter matrix " << name << " (" << r << "x" << c << "):\n";
-    for (int i = 0; i < r; i++) for (int j = 0; j < c; j++) cin >> a[i][j];
-}
-void show(int a[MAX][MAX], int r, int c) {
-    for (int i = 0; i < r; i++) { for (int j = 0; j < c; j++) cout << a[i][j] << "\t"; cout << endl; }
-}
+class AddNumbers {
+public:
+    double calculateSum() {
+        double number, sum = 0;
+        while (cin >> number) sum = sum + number;
+        return sum;
+    }
+};
+
 int main() {
-    int A[MAX][MAX], B[MAX][MAX], R[MAX][MAX];
-    int r1, c1, r2, c2, ch;
-    cout << "Rows and columns of A: "; cin >> r1 >> c1;
-    read(A, r1, c1, "A");
-    cout << "Rows and columns of B: "; cin >> r2 >> c2;
-    read(B, r2, c2, "B");
-    do {
-        cout << "\n1.Add 2.Subtract 3.Multiply 4.Transpose of A 0.Exit\nChoice: ";
-        cin >> ch;
-        if (ch == 1 || ch == 2) {
-            if (r1 != r2 || c1 != c2) { cout << "Dimensions must match!\n"; continue; }
-            for (int i = 0; i < r1; i++) for (int j = 0; j < c1; j++)
-                R[i][j] = (ch == 1) ? A[i][j] + B[i][j] : A[i][j] - B[i][j];
-            show(R, r1, c1);
-        } else if (ch == 3) {
-            if (c1 != r2) { cout << "Columns of A must equal rows of B!\n"; continue; }
-            for (int i = 0; i < r1; i++) for (int j = 0; j < c2; j++) {
-                R[i][j] = 0;
-                for (int k = 0; k < c1; k++) R[i][j] += A[i][k] * B[k][j];
+    AddNumbers a;
+    cout << a.calculateSum();
+    return 0;
+}
+```
+
+# 3. String Operations
+
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+class StringOperations {
+    bool isLetterOrDigit(char ch) {
+        return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
+               (ch >= '0' && ch <= '9');
+    }
+    char lowerCase(char ch) {
+        if (ch >= 'A' && ch <= 'Z') return ch - 'A' + 'a';
+        return ch;
+    }
+public:
+    string longestWord(string text) {
+        string word = "", longest = "";
+        for (int i = 0; i <= text.length(); i++) {
+            if (text[i] != ' ' && text[i] != '\0') word += text[i];
+            else {
+                if (word.length() > longest.length()) longest = word;
+                word = "";
             }
-            show(R, r1, c2);
-        } else if (ch == 4) {
-            for (int i = 0; i < r1; i++) for (int j = 0; j < c1; j++) R[j][i] = A[i][j];
-            show(R, c1, r1);
         }
-    } while (ch != 0);
-    return 0;
-}
-
-
-// ---------- Exp 5: Linear and Binary Search ----------
-#include <iostream>
-#include <algorithm>
-using namespace std;
-
-int linearSearch(int a[], int n, int key, int &cmp) {
-    cmp = 0;
-    for (int i = 0; i < n; i++) { cmp++; if (a[i] == key) return i; }
-    return -1;
-}
-int binarySearch(int a[], int n, int key, int &cmp) {
-    int lo = 0, hi = n - 1; cmp = 0;
-    while (lo <= hi) {
-        int mid = (lo + hi) / 2;
-        cmp++;
-        if (a[mid] == key) return mid;
-        else if (a[mid] < key) lo = mid + 1;
-        else hi = mid - 1;
+        return longest;
     }
-    return -1;
-}
-int main() {
-    int n, key, c1, c2;
-    cout << "Number of students who attended: ";
-    cin >> n;
-    int a[100];
-    cout << "Enter roll numbers (random order):\n";
-    for (int i = 0; i < n; i++) cin >> a[i];
-    char ans;
-    do {
-        cout << "Enter roll number to search: ";
-        cin >> key;
-        int p1 = linearSearch(a, n, key, c1);
-        int b[100]; copy(a, a + n, b); sort(b, b + n);
-        int p2 = binarySearch(b, n, key, c2);
-        cout << (p1 != -1 ? "Attended the training program\n" : "Did NOT attend\n");
-        cout << "Linear search comparisons: " << c1 << endl;
-        cout << "Binary search comparisons: " << c2 << endl;
-        cout << "Search again (y/n)? "; cin >> ans;
-    } while (ans == 'y' || ans == 'Y');
-    return 0;
-}
 
-
-// ---------- Exp 6: Selection and Bubble Sort ----------
-#include <iostream>
-using namespace std;
-
-void selectionSort(float a[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        int mn = i;
-        for (int j = i + 1; j < n; j++) if (a[j] < a[mn]) mn = j;
-        float t = a[i]; a[i] = a[mn]; a[mn] = t;
+    int frequency(string text, char target) {
+        int count = 0;
+        for (int i = 0; i < text.length(); i++)
+            if (text[i] == target) count++;
+        return count;
     }
-}
-void bubbleSort(float a[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        bool swapped = false;
-        for (int j = 0; j < n - i - 1; j++)
-            if (a[j] > a[j + 1]) { float t = a[j]; a[j] = a[j + 1]; a[j + 1] = t; swapped = true; }
-        if (!swapped) break;
-    }
-}
-void display(float a[], int n) { for (int i = 0; i < n; i++) cout << a[i] << " "; cout << endl; }
-void topFive(float a[], int n) {
-    cout << "Top five scores: ";
-    for (int i = n - 1; i >= 0 && i >= n - 5; i--) cout << a[i] << " ";
-    cout << endl;
-}
-int main() {
-    int n, ch;
-    float orig[100], a[100];
-    cout << "Number of students: "; cin >> n;
-    cout << "Enter percentages:\n";
-    for (int i = 0; i < n; i++) cin >> orig[i];
-    do {
-        for (int i = 0; i < n; i++) a[i] = orig[i];
-        cout << "\n1.Selection sort 2.Bubble sort 0.Exit\nChoice: "; cin >> ch;
-        if (ch == 1) selectionSort(a, n);
-        else if (ch == 2) bubbleSort(a, n);
-        else continue;
-        cout << "Sorted: "; display(a, n);
-        topFive(a, n);
-    } while (ch != 0);
-    return 0;
-}
 
-
-// ---------- Exp 7: Palindrome Using Stack ----------
-#include <iostream>
-#include <string>
-#include <cctype>
-using namespace std;
-
-class Stack {
-    char data[200];
-    int top;
-public:
-    Stack() : top(-1) {}
-    bool empty() { return top == -1; }
-    bool full()  { return top == 199; }
-    void push(char c) { if (!full()) data[++top] = c; }
-    char pop() { return empty() ? '\0' : data[top--]; }
-};
-
-string reverseUsingStack(const string &s) {
-    Stack st;
-    for (char c : s) st.push(c);
-    string r;
-    while (!st.empty()) r += st.pop();
-    return r;
-}
-string clean(const string &s) {
-    string t;
-    for (char c : s) if (isalnum((unsigned char)c)) t += tolower(c);
-    return t;
-}
-bool isPalindrome(const string &s) {
-    string t = clean(s);
-    return t == reverseUsingStack(t);
-}
-int main() {
-    string s;
-    cout << "Enter a string: ";
-    getline(cin, s);
-    cout << "Original: " << s << endl;
-    cout << "Reversed: " << reverseUsingStack(s) << endl;
-    cout << (isPalindrome(s) ? "It is a palindrome\n" : "It is not a palindrome\n");
-    return 0;
-}
-
-
-// ---------- Exp 8: Balanced Parentheses Using Stack ----------
-#include <iostream>
-#include <string>
-using namespace std;
-
-class Stack {
-    char data[200];
-    int top;
-public:
-    Stack() : top(-1) {}
-    bool empty() { return top == -1; }
-    void push(char c) { data[++top] = c; }
-    char pop() { return data[top--]; }
-    char peek() { return data[top]; }
-};
-
-bool wellFormed(const string &e) {
-    Stack st;
-    for (char c : e) {
-        if (c == '(' || c == '{' || c == '[') st.push(c);
-        else if (c == ')' || c == '}' || c == ']') {
-            if (st.empty()) return false;
-            char t = st.pop();
-            if ((c == ')' && t != '(') || (c == '}' && t != '{') || (c == ']' && t != '['))
-                return false;
+    bool palindrome(string text) {
+        int left = 0, right = static_cast<int>(text.length()) - 1;
+        while (left < right) {
+            while (left < right && !isLetterOrDigit(text[left])) left++;
+            while (left < right && !isLetterOrDigit(text[right])) right--;
+            if (lowerCase(text[left]) != lowerCase(text[right])) return false;
+            left++;
+            right--;
         }
+        return true;
     }
-    return st.empty();
-}
-int main() {
-    string e;
-    cout << "Enter expression: ";
-    getline(cin, e);
-    cout << (wellFormed(e) ? "Well parenthesized\n" : "NOT well parenthesized\n");
-    return 0;
-}
 
-
-// ---------- Exp 9: Job Queue Simulation ----------
-#include <iostream>
-#include <string>
-using namespace std;
-const int SIZE = 5;
-
-class JobQueue {
-    string jobs[SIZE];
-    int front, rear, count;
-public:
-    JobQueue() : front(0), rear(-1), count(0) {}
-    void addJob(const string &j) {
-        if (count == SIZE) { cout << "Queue full! Cannot add job.\n"; return; }
-        rear = (rear + 1) % SIZE;
-        jobs[rear] = j; count++;
-        cout << "Job '" << j << "' added.\n";
-    }
-    void deleteJob() {
-        if (count == 0) { cout << "Queue empty!\n"; return; }
-        cout << "Job '" << jobs[front] << "' processed/deleted.\n";
-        front = (front + 1) % SIZE; count--;
-    }
-    void display() {
-        if (count == 0) { cout << "Queue empty!\n"; return; }
-        cout << "Jobs (front -> rear): ";
-        for (int i = 0, k = front; i < count; i++, k = (k + 1) % SIZE) cout << jobs[k] << "  ";
-        cout << endl;
-    }
-};
-int main() {
-    JobQueue q;
-    int ch; string j;
-    do {
-        cout << "\n1.Add job 2.Delete job 3.Display 0.Exit\nChoice: ";
-        cin >> ch;
-        switch (ch) {
-            case 1: cout << "Job name: "; cin >> j; q.addJob(j); break;
-            case 2: q.deleteJob(); break;
-            case 3: q.display(); break;
+    int substringIndex(string text, string part) {
+        for (int i = 0; i <= text.length() - part.length(); i++) {
+            int j = 0;
+            while (j < part.length() && text[i + j] == part[j]) j++;
+            if (j == part.length()) return i;
         }
-    } while (ch != 0);
+        return -1;
+    }
+
+    void wordFrequencies(string text) {
+        string words[100];
+        int counts[100], total = 0;
+        string word = "";
+        for (int i = 0; i <= text.length(); i++) {
+            if (text[i] != ' ' && text[i] != '\0') word += text[i];
+            else if (word != "") {
+                int found = -1;
+                for (int j = 0; j < total; j++)
+                    if (words[j] == word) found = j;
+                if (found == -1) {
+                    words[total] = word;
+                    counts[total] = 1;
+                    total++;
+                } else counts[found]++;
+                word = "";
+            }
+        }
+        for (int i = 0; i < total; i++) cout << words[i] << " : " << counts[i] << endl;
+    }
+};
+
+int main() {
+    StringOperations s;
+    string text, part;
+    char target;
+    getline(cin, text);
+    cin >> target;
+    cout << "Longest word: " << s.longestWord(text) << endl;
+    cout << "Character frequency: " << s.frequency(text, target) << endl;
+    cout << "Palindrome: " << (s.palindrome(text) ? "Yes" : "No") << endl;
+    cin.ignore();
+    getline(cin, part);
+    cout << "Substring index: " << s.substringIndex(text, part) << endl;
+    s.wordFrequencies(text);
     return 0;
 }
+```
 
+# 4. Matrix Operations
 
-// ---------- Exp 10: Pinnacle Club Linked List ----------
+```cpp
 #include <iostream>
 #include <string>
 using namespace std;
 
-struct Node {
-    string prn, name;
-    Node *next;
-    Node(string p, string n) : prn(p), name(n), next(NULL) {}
-};
-
-class Club {
+class MatrixOperations {
 public:
-    Node *head;
-    Club() : head(NULL) {}
-
-    void addPresident(string p, string n) {
-        Node *t = new Node(p, n);
-        t->next = head; head = t;
-    }
-    void addSecretary(string p, string n) {
-        Node *t = new Node(p, n);
-        if (!head) { head = t; return; }
-        Node *c = head;
-        while (c->next) c = c->next;
-        c->next = t;
-    }
-    void addMember(string p, string n) {
-        if (!head || !head->next) { addSecretary(p, n); return; }
-        Node *t = new Node(p, n), *c = head;
-        while (c->next->next) c = c->next;
-        t->next = c->next; c->next = t;
-    }
-    void deletePresident() {
-        if (!head) { cout << "List empty\n"; return; }
-        Node *t = head; head = head->next; delete t;
-        cout << "President removed.\n";
-    }
-    void deleteSecretary() {
-        if (!head) { cout << "List empty\n"; return; }
-        if (!head->next) { delete head; head = NULL; cout << "Secretary removed.\n"; return; }
-        Node *c = head;
-        while (c->next->next) c = c->next;
-        delete c->next; c->next = NULL;
-        cout << "Secretary removed.\n";
-    }
-    void deleteMember(string p) {
-        if (!head) { cout << "List empty\n"; return; }
-        if (head->prn == p) { deletePresident(); return; }
-        Node *c = head;
-        while (c->next && c->next->prn != p) c = c->next;
-        if (!c->next) { cout << "PRN not found\n"; return; }
-        Node *t = c->next; c->next = t->next; delete t;
-        cout << "Member removed.\n";
-    }
-    int count() {
-        int n = 0;
-        for (Node *c = head; c; c = c->next) n++;
-        return n;
-    }
-    void display() {
-        if (!head) { cout << "No members\n"; return; }
-        int i = 1, total = count();
-        for (Node *c = head; c; c = c->next, i++) {
-            cout << i << ". " << c->prn << "  " << c->name;
-            if (i == 1) cout << "  [President]";
-            if (i == total && total > 1) cout << "  [Secretary]";
+    void add(int a[10][10], int b[10][10], int n) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) cout << a[i][j] + b[i][j] << " ";
             cout << endl;
         }
     }
-    void concatenate(Club &other) {
-        if (!head) { head = other.head; }
-        else {
-            Node *c = head;
-            while (c->next) c = c->next;
-            c->next = other.head;
+
+    void subtract(int a[10][10], int b[10][10], int n) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) cout << a[i][j] - b[i][j] << " ";
+            cout << endl;
         }
-        other.head = NULL;
+    }
+
+    void multiply(int a[10][10], int b[10][10], int n) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int sum = 0;
+                for (int k = 0; k < n; k++) sum += a[i][k] * b[k][j];
+                cout << sum << " ";
+            }
+            cout << endl;
+        }
+    }
+
+    void transpose(int a[10][10], int n) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) cout << a[j][i] << " ";
+            cout << endl;
+        }
     }
 };
 
 int main() {
-    Club A, B;
-    Club *cur = &A;
-    int ch; string p, n;
-    do {
-        cout << "\n--- Working on Division " << (cur == &A ? "A" : "B") << " ---\n"
-             << "1.Add president 2.Add secretary 3.Add member\n"
-             << "4.Delete president 5.Delete secretary 6.Delete member\n"
-             << "7.Count 8.Display 9.Switch division 10.Concatenate B onto A 0.Exit\nChoice: ";
-        cin >> ch;
-        switch (ch) {
-            case 1: case 2: case 3:
-                cout << "PRN: "; cin >> p; cout << "Name: "; cin.ignore(); getline(cin, n);
-                if (ch == 1) cur->addPresident(p, n);
-                else if (ch == 2) cur->addSecretary(p, n);
-                else cur->addMember(p, n);
-                break;
-            case 4: cur->deletePresident(); break;
-            case 5: cur->deleteSecretary(); break;
-            case 6: cout << "PRN to delete: "; cin >> p; cur->deleteMember(p); break;
-            case 7: cout << "Total members: " << cur->count() << endl; break;
-            case 8: cur->display(); break;
-            case 9: cur = (cur == &A) ? &B : &A; break;
-            case 10: A.concatenate(B); cout << "Concatenated. Combined list:\n"; A.display(); break;
-        }
-    } while (ch != 0);
+    int n, a[10][10], b[10][10];
+    cin >> n;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++) cin >> a[i][j];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++) cin >> b[i][j];
+
+    MatrixOperations m;
+    m.add(a, b, n);
+    m.subtract(a, b, n);
+    m.multiply(a, b, n);
+    m.transpose(a, n);
     return 0;
 }
+```
 
+# 5. Linear Search and Binary Search
 
-// ---------- Quick Sort Program ----------
+```cpp
 #include <iostream>
+#include <string>
 using namespace std;
 
-void display(float a[], int n) {
-    for (int i = 0; i < n; i++) {
-        cout << a[i] << " ";
+class Searching {
+public:
+    int linearSearch(int a[], int n, int key, int& comparisons) {
+        comparisons = 0;
+        for (int i = 0; i < n; i++) {
+            comparisons++;
+            if (a[i] == key) return i;
+        }
+        return -1;
     }
-    cout << endl;
+
+    int binarySearch(int a[], int n, int key, int& comparisons) {
+        int left = 0, right = n - 1;
+        comparisons = 0;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            comparisons++;
+            if (a[mid] == key) return mid;
+            if (a[mid] < key) left = mid + 1;
+            else right = mid - 1;
+        }
+        return -1;
+    }
+
+    void sortArray(int a[], int n) {
+        for (int i = 0; i < n - 1; i++)
+            for (int j = i + 1; j < n; j++)
+                if (a[i] > a[j]) {
+                    int temp = a[i]; a[i] = a[j]; a[j] = temp;
+                }
+    }
+};
+
+int main() {
+    int n, a[100], key, comparisons;
+    cin >> n;
+    for (int i = 0; i < n; i++) cin >> a[i];
+    cin >> key;
+    Searching s;
+    cout << "Linear position: " << s.linearSearch(a, n, key, comparisons);
+    cout << " Comparisons: " << comparisons << endl;
+    s.sortArray(a, n);
+    cout << "Binary position: " << s.binarySearch(a, n, key, comparisons);
+    cout << " Comparisons: " << comparisons << endl;
+    return 0;
 }
+```
 
-int partitionArray(float a[], int low, int high) {
-    float pivot = a[high];
-    int i = low - 1;
+# 6. Selection Sort and Bubble Sort
 
-    for (int j = low; j < high; j++) {
-        if (a[j] <= pivot) {
-            i++;
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
 
-            float temp = a[i];
-            a[i] = a[j];
-            a[j] = temp;
+class Sorting {
+public:
+    void selectionSort(float a[], int n) {
+        for (int i = 0; i < n - 1; i++) {
+            int min = i;
+            for (int j = i + 1; j < n; j++)
+                if (a[j] < a[min]) min = j;
+            float temp = a[i]; a[i] = a[min]; a[min] = temp;
         }
     }
 
-    float temp = a[i + 1];
-    a[i + 1] = a[high];
-    a[high] = temp;
-
-    return i + 1;
-}
-
-void quickSort(float a[], int low, int high) {
-    if (low < high) {
-        int position = partitionArray(a, low, high);
-
-        quickSort(a, low, position - 1);
-        quickSort(a, position + 1, high);
-    }
-}
-
-void displayTopFive(float a[], int n) {
-    cout << "Top five scores: ";
-
-    int start = n - 1;
-    int stop = n - 5;
-
-    if (stop < 0) {
-        stop = 0;
+    void bubbleSort(float a[], int n) {
+        for (int i = 0; i < n - 1; i++)
+            for (int j = 0; j < n - i - 1; j++)
+                if (a[j] > a[j + 1]) {
+                    float temp = a[j]; a[j] = a[j + 1]; a[j + 1] = temp;
+                }
     }
 
-    for (int i = start; i >= stop; i--) {
-        cout << a[i] << " ";
+    void displayTopFive(float a[], int n) {
+        for (int i = n - 1, count = 0; i >= 0 && count < 5; i--, count++)
+            cout << a[i] << " ";
+        cout << endl;
     }
-
-    cout << endl;
-}
+};
 
 int main() {
     int n;
-    float percentage[100];
-
-    cout << "Enter number of students: ";
+    float a[100], b[100];
     cin >> n;
-
-    cout << "Enter percentages:\n";
-
-    for (int i = 0; i < n; i++) {
-        cin >> percentage[i];
-    }
-
-    quickSort(percentage, 0, n - 1);
-
-    cout << "\nPercentages in ascending order:\n";
-    display(percentage, n);
-
-    displayTopFive(percentage, n);
-
+    for (int i = 0; i < n; i++) { cin >> a[i]; b[i] = a[i]; }
+    Sorting s;
+    s.selectionSort(a, n);
+    s.bubbleSort(b, n);
+    s.displayTopFive(a, n);
+    s.displayTopFive(b, n);
     return 0;
 }
+```
 
+# 7. Stack: Reverse a String and Check Palindrome
 
-// ---------- Pizza Parlour Circular Queue ----------
+```cpp
 #include <iostream>
+#include <string>
+using namespace std;
+
+class StringStack {
+public:
+    string reverseString(string text) {
+        char stack[1000];
+        int top = -1;
+        for (int i = 0; i < text.length(); i++) stack[++top] = text[i];
+        string reversed = "";
+        while (top >= 0) reversed += stack[top--];
+        return reversed;
+    }
+
+    bool isPalindrome(string text) {
+        string clean = "";
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text[i];
+            if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
+                (ch >= '0' && ch <= '9')) {
+                if (ch >= 'A' && ch <= 'Z') ch = ch - 'A' + 'a';
+                clean += ch;
+            }
+        }
+        return clean == reverseString(clean);
+    }
+};
+
+int main() {
+    string text;
+    getline(cin, text);
+    StringStack s;
+    cout << text << endl << s.reverseString(text) << endl;
+    cout << (s.isPalindrome(text) ? "Palindrome" : "Not palindrome");
+    return 0;
+}
+```
+
+# 8. Check Balanced Brackets
+
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+class BracketStack {
+public:
+    bool isBalanced(string text) {
+        char stack[1000];
+        int top = -1;
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text[i];
+            if (ch == '(' || ch == '{' || ch == '[') stack[++top] = ch;
+            else if (ch == ')' || ch == '}' || ch == ']') {
+                if (top == -1) return false;
+                char open = stack[top--];
+                if ((ch == ')' && open != '(') ||
+                    (ch == '}' && open != '{') ||
+                    (ch == ']' && open != '[')) return false;
+            }
+        }
+        return top == -1;
+    }
+};
+
+int main() {
+    string text;
+    getline(cin, text);
+    BracketStack b;
+    cout << (b.isBalanced(text) ? "Well parenthesized" : "Not well parenthesized");
+    return 0;
+}
+```
+
+# 9. Job Queue
+
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+class JobQueue {
+    string jobs[5];
+    int front, rear, count;
+public:
+    JobQueue() { front = 0; rear = -1; count = 0; }
+
+    void addJob(string name) {
+        if (count == 5) cout << "Queue is full" << endl;
+        else {
+            rear = (rear + 1) % 5;
+            jobs[rear] = name;
+            count++;
+            cout << "Job added" << endl;
+        }
+    }
+
+    void deleteJob() {
+        if (count == 0) cout << "Queue is empty" << endl;
+        else {
+            cout << "Processing: " << jobs[front] << endl;
+            front = (front + 1) % 5;
+            count--;
+        }
+    }
+};
+
+int main() {
+    JobQueue q;
+    q.addJob("Print");
+    q.addJob("Download");
+    q.deleteJob();
+    return 0;
+}
+```
+
+# 10. Pizza Parlour Circular Queue
+
+```cpp
+#include <iostream>
+#include <string>
 using namespace std;
 
 class PizzaQueue {
-    int *orders;
-    int front, rear, count, M;
+    string orders[5];
+    int front, rear;
 public:
-    PizzaQueue(int m) {
-        M = m; orders = new int[M];
-        front = 0; rear = -1; count = 0;
-    }
-    ~PizzaQueue() { delete[] orders; }
-    bool isFull()  { return count == M; }
-    bool isEmpty() { return count == 0; }
+    PizzaQueue() { front = -1; rear = -1; }
 
-    void placeOrder(int id) {
-        if (isFull()) { cout << "Parlour full! Cannot accept order.\n"; return; }
-        rear = (rear + 1) % M;
-        orders[rear] = id;
-        count++;
-        cout << "Order " << id << " placed.\n";
+    void addOrder(string order) {
+        if ((rear + 1) % 5 == front) cout << "Queue is full" << endl;
+        else {
+            if (front == -1) front = rear = 0;
+            else rear = (rear + 1) % 5;
+            orders[rear] = order;
+            cout << "Order added: " << order << endl;
+        }
     }
+
     void serveOrder() {
-        if (isEmpty()) { cout << "No orders to serve.\n"; return; }
-        cout << "Order " << orders[front] << " served.\n";
-        front = (front + 1) % M;
-        count--;
-    }
-    void display() {
-        if (isEmpty()) { cout << "No pending orders.\n"; return; }
-        cout << "Pending orders: ";
-        for (int i = 0, j = front; i < count; i++, j = (j + 1) % M)
-            cout << orders[j] << " ";
-        cout << endl;
+        if (front == -1) cout << "Queue is empty" << endl;
+        else {
+            cout << "Order served: " << orders[front] << endl;
+            if (front == rear) front = rear = -1;
+            else front = (front + 1) % 5;
+        }
     }
 };
 
 int main() {
-    int M, ch, id;
-    cout << "Enter max number of orders (M): ";
-    cin >> M;
-    PizzaQueue q(M);
-    do {
-        cout << "\n1.Place Order 2.Serve Order 3.Display 4.Exit\nChoice: ";
-        cin >> ch;
-        switch (ch) {
-            case 1: cout << "Order ID: "; cin >> id; q.placeOrder(id); break;
-            case 2: q.serveOrder(); break;
-            case 3: q.display(); break;
-            case 4: break;
-            default: cout << "Invalid choice\n";
-        }
-    } while (ch != 4);
+    PizzaQueue q;
+    q.addOrder("Margherita");
+    q.addOrder("Paneer");
+    q.serveOrder();
     return 0;
 }
+```
+
+# 11. Pinnacle Club Singly Linked List
+
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+class PinnacleClub {
+    struct Node {
+        int prn;
+        string name;
+        Node* next;
+    };
+    Node* head;
+public:
+    PinnacleClub() { head = NULL; }
+
+    void addPresident(int prn, string name) {
+        Node* n = new Node{prn, name, head};
+        head = n;
+    }
+
+    void addMember(int prn, string name) {
+        if (head == NULL) { addPresident(prn, name); return; }
+        Node* n = new Node{prn, name, head->next};
+        head->next = n;
+    }
+
+    void addSecretary(int prn, string name) {
+        Node* n = new Node{prn, name, NULL};
+        if (head == NULL) { head = n; return; }
+        Node* p = head;
+        while (p->next != NULL) p = p->next;
+        p->next = n;
+    }
+
+    void deletePresident() {
+        if (head == NULL) return;
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+    }
+
+    void deleteMember(int prn) {
+        if (head == NULL) return;
+        if (head->prn == prn) { deletePresident(); return; }
+        Node* p = head;
+        while (p->next != NULL && p->next->prn != prn) p = p->next;
+        if (p->next != NULL) {
+            Node* temp = p->next;
+            p->next = temp->next;
+            delete temp;
+        }
+    }
+
+    void deleteSecretary() {
+        if (head == NULL) return;
+        if (head->next == NULL) { deletePresident(); return; }
+        Node* p = head;
+        while (p->next->next != NULL) p = p->next;
+        delete p->next;
+        p->next = NULL;
+    }
+
+    int countMembers() {
+        int count = 0;
+        Node* p = head;
+        while (p != NULL) { count++; p = p->next; }
+        return count;
+    }
+
+    void searchMember(int prn) {
+        Node* p = head;
+        while (p != NULL && p->prn != prn) p = p->next;
+        if (p == NULL) cout << "Member not found" << endl;
+        else cout << p->prn << " " << p->name << endl;
+    }
+
+    void display() {
+        Node* p = head;
+        while (p != NULL) {
+            cout << p->prn << " " << p->name << endl;
+            p = p->next;
+        }
+    }
+
+    void concatenate(PinnacleClub& second) {
+        if (head == NULL) { head = second.head; second.head = NULL; return; }
+        Node* p = head;
+        while (p->next != NULL) p = p->next;
+        p->next = second.head;
+        second.head = NULL;
+    }
+};
+
+int main() {
+    PinnacleClub first, second;
+    first.addPresident(1, "Asha");
+    first.addMember(2, "Ravi");
+    first.addSecretary(3, "Mina");
+    second.addMember(4, "Jay");
+    first.concatenate(second);
+    first.display();
+    cout << "Total members: " << first.countMembers();
+    return 0;
+}
+```
 
 
-// ---------- Ice-cream Sets Using Linked List ----------
+# 12. Quick Sort
+
+```cpp
 #include <iostream>
 using namespace std;
 
-struct Node {
-    int roll;
-    Node *next;
-    Node(int r) : roll(r), next(NULL) {}
-};
-
-class Set {
+class QuickSort {
 public:
-    Node *head;
-    Set() { head = NULL; }
+    void swapNumbers(int& a, int& b) {
+        int temp = a;
+        a = b;
+        b = temp;
+    }
 
-    bool contains(int r) {
-        for (Node *p = head; p; p = p->next)
-            if (p->roll == r) return true;
-        return false;
+    int partition(int a[], int low, int high) {
+        int pivot = a[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (a[j] < pivot) {
+                i++;
+                swapNumbers(a[i], a[j]);
+            }
+        }
+
+        swapNumbers(a[i + 1], a[high]);
+        return i + 1;
     }
-    void add(int r) {
-        if (contains(r)) return;
-        Node *n = new Node(r);
-        if (!head) head = n;
-        else { Node *p = head; while (p->next) p = p->next; p->next = n; }
+
+    void quickSort(int a[], int low, int high) {
+        if (low < high) {
+            int pivotPosition = partition(a, low, high);
+
+            quickSort(a, low, pivotPosition - 1);
+            quickSort(a, pivotPosition + 1, high);
+        }
     }
-    int size() {
-        int c = 0;
-        for (Node *p = head; p; p = p->next) c++;
-        return c;
-    }
-    void display() {
-        if (!head) { cout << "(none)"; }
-        for (Node *p = head; p; p = p->next) cout << p->roll << " ";
+
+    void display(int a[], int n) {
+        for (int i = 0; i < n; i++)
+            cout << a[i] << " ";
         cout << endl;
     }
 };
 
-Set intersection(Set &A, Set &B) {
-    Set r;
-    for (Node *p = A.head; p; p = p->next)
-        if (B.contains(p->roll)) r.add(p->roll);
-    return r;
-}
-
-Set unionSet(Set &A, Set &B) {
-    Set r;
-    for (Node *p = A.head; p; p = p->next) r.add(p->roll);
-    for (Node *p = B.head; p; p = p->next) r.add(p->roll);
-    return r;
-}
-
-Set either(Set &A, Set &B) {
-    Set r;
-    for (Node *p = A.head; p; p = p->next)
-        if (!B.contains(p->roll)) r.add(p->roll);
-    for (Node *p = B.head; p; p = p->next)
-        if (!A.contains(p->roll)) r.add(p->roll);
-    return r;
-}
-
 int main() {
-    Set A, B;
-    int total, n, r;
-    cout << "Total students in class: ";
-    cin >> total;
+    int n, a[100];
 
-    cout << "Number of students who like Vanilla: ";
     cin >> n;
-    cout << "Enter roll numbers: ";
-    while (n--) { cin >> r; A.add(r); }
 
-    cout << "Number of students who like Butterscotch: ";
-    cin >> n;
-    cout << "Enter roll numbers: ";
-    while (n--) { cin >> r; B.add(r); }
+    for (int i = 0; i < n; i++)
+        cin >> a[i];
 
-    Set both = intersection(A, B);
-    Set one  = either(A, B);
-    Set uni  = unionSet(A, B);
+    QuickSort q;
+    q.quickSort(a, 0, n - 1);
+    q.display(a, n);
 
-    cout << "\na) Like both: ";            both.display();
-    cout << "b) Like either, not both: "; one.display();
-    cout << "c) Like neither: " << total - uni.size() << endl;
     return 0;
 }
+```
+
+# 13. Ice-Cream Sets Using Linked List
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class IceCreamSets {
+    struct Node {
+        int roll;
+        Node* next;
+    };
+
+    Node* head;
+
+public:
+    IceCreamSets() {
+        head = NULL;
+    }
+
+    bool contains(int roll) {
+        Node* current = head;
+
+        while (current != NULL) {
+            if (current->roll == roll)
+                return true;
+
+            current = current->next;
+        }
+
+        return false;
+    }
+
+    void add(int roll) {
+        if (contains(roll))
+            return;
+
+        Node* newNode = new Node;
+        newNode->roll = roll;
+        newNode->next = NULL;
+
+        if (head == NULL) {
+            head = newNode;
+        } else {
+            Node* current = head;
+
+            while (current->next != NULL)
+                current = current->next;
+
+            current->next = newNode;
+        }
+    }
+
+    int size() {
+        int count = 0;
+        Node* current = head;
+
+        while (current != NULL) {
+            count++;
+            current = current->next;
+        }
+
+        return count;
+    }
+
+    void display() {
+        Node* current = head;
+
+        if (current == NULL) {
+            cout << "None";
+            return;
+        }
+
+        while (current != NULL) {
+            cout << current->roll << " ";
+            current = current->next;
+        }
+    }
+
+    void intersection(IceCreamSets& other,
+                      IceCreamSets& result) {
+        Node* current = head;
+
+        while (current != NULL) {
+            if (other.contains(current->roll))
+                result.add(current->roll);
+
+            current = current->next;
+        }
+    }
+
+    void unionSet(IceCreamSets& other,
+                  IceCreamSets& result) {
+        Node* current = head;
+
+        while (current != NULL) {
+            result.add(current->roll);
+            current = current->next;
+        }
+
+        current = other.head;
+
+        while (current != NULL) {
+            result.add(current->roll);
+            current = current->next;
+        }
+    }
+
+    void eitherButNotBoth(IceCreamSets& other,
+                          IceCreamSets& result) {
+        Node* current = head;
+
+        while (current != NULL) {
+            if (!other.contains(current->roll))
+                result.add(current->roll);
+
+            current = current->next;
+        }
+
+        current = other.head;
+
+        while (current != NULL) {
+            if (!contains(current->roll))
+                result.add(current->roll);
+
+            current = current->next;
+        }
+    }
+};
+
+int main() {
+    int total, n, roll;
+
+    IceCreamSets vanilla;
+    IceCreamSets butterscotch;
+    IceCreamSets both;
+    IceCreamSets either;
+    IceCreamSets all;
+
+    cin >> total;
+
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> roll;
+        vanilla.add(roll);
+    }
+
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> roll;
+        butterscotch.add(roll);
+    }
+
+    vanilla.intersection(butterscotch, both);
+    vanilla.eitherButNotBoth(butterscotch, either);
+    vanilla.unionSet(butterscotch, all);
+
+    cout << "Students who like both: ";
+    both.display();
+    cout << endl;
+
+    cout << "Students who like either but not both: ";
+    either.display();
+    cout << endl;
+
+    cout << "Students who like neither: "
+         << total - all.size()
+         << endl;
+
+    return 0;
+}
+```
