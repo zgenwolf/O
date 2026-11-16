@@ -1,0 +1,1232 @@
+/* ==================================================
+   1. REVERSE A NUMBER
+   ================================================== */
+
+#include <iostream>
+using namespace std;
+
+class ReverseNumber {
+public:
+    int reverse(int number) {
+        int answer = 0;
+
+        while (number > 0) {
+            int digit = number % 10;
+            answer = answer * 10 + digit;
+            number = number / 10;
+        }
+
+        return answer;
+    }
+};
+
+int main() {
+    int number;
+
+    cout << "Enter a number: ";
+    cin >> number;
+
+    ReverseNumber r;
+    cout << "Reversed number: " << r.reverse(number);
+
+    return 0;
+}
+
+
+/* ==================================================
+   2. SUM OF NUMBERS UNTIL INPUT STOPS
+   ================================================== */
+
+#include <iostream>
+using namespace std;
+
+class AddNumbers {
+public:
+    double calculateSum() {
+        double number, sum = 0;
+
+        cout << "Enter numbers (enter a character to stop):\n";
+
+        while (cin >> number) {
+            sum = sum + number;
+        }
+
+        return sum;
+    }
+};
+
+int main() {
+    AddNumbers a;
+
+    double result = a.calculateSum();
+
+    cout << "Sum = " << result;
+
+    return 0;
+}
+
+
+/* ==================================================
+   3. STRING OPERATIONS
+   Longest word, character frequency, palindrome,
+   substring search and word frequency.
+   ================================================== */
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class StringOperations {
+public:
+
+    string longestWord(string text) {
+        string word = "", longest = "";
+
+        for (int i = 0; i <= text.length(); i++) {
+            if (i < text.length() && text[i] != ' ') {
+                word = word + text[i];
+            }
+            else {
+                if (word.length() > longest.length())
+                    longest = word;
+
+                word = "";
+            }
+        }
+
+        return longest;
+    }
+
+    int frequency(string text, char target) {
+        int count = 0;
+
+        for (int i = 0; i < text.length(); i++) {
+            if (text[i] == target)
+                count++;
+        }
+
+        return count;
+    }
+
+    bool palindrome(string text) {
+        int left = 0;
+        int right = text.length() - 1;
+
+        while (left < right) {
+
+            while (left < right &&
+                   !((text[left] >= 'a' && text[left] <= 'z') ||
+                     (text[left] >= 'A' && text[left] <= 'Z') ||
+                     (text[left] >= '0' && text[left] <= '9')))
+                left++;
+
+            while (left < right &&
+                   !((text[right] >= 'a' && text[right] <= 'z') ||
+                     (text[right] >= 'A' && text[right] <= 'Z') ||
+                     (text[right] >= '0' && text[right] <= '9')))
+                right--;
+
+            char a = text[left];
+            char b = text[right];
+
+            if (a >= 'A' && a <= 'Z')
+                a = a + 32;
+
+            if (b >= 'A' && b <= 'Z')
+                b = b + 32;
+
+            if (a != b)
+                return false;
+
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+
+    int substringIndex(string text, string part) {
+
+        if (part.length() > text.length())
+            return -1;
+
+        for (int i = 0; i <= text.length() - part.length(); i++) {
+
+            int j = 0;
+
+            while (j < part.length() && text[i + j] == part[j])
+                j++;
+
+            if (j == part.length())
+                return i;
+        }
+
+        return -1;
+    }
+
+    void wordFrequencies(string text) {
+        string words[100];
+        int counts[100];
+        int total = 0;
+        string word = "";
+
+        for (int i = 0; i <= text.length(); i++) {
+
+            if (i < text.length() && text[i] != ' ') {
+                word = word + text[i];
+            }
+            else if (word != "") {
+
+                int found = -1;
+
+                for (int j = 0; j < total; j++) {
+                    if (words[j] == word) {
+                        found = j;
+                        break;
+                    }
+                }
+
+                if (found == -1 && total < 100) {
+                    words[total] = word;
+                    counts[total] = 1;
+                    total++;
+                }
+                else if (found != -1) {
+                    counts[found]++;
+                }
+
+                word = "";
+            }
+        }
+
+        for (int i = 0; i < total; i++) {
+            cout << words[i] << " : " << counts[i] << endl;
+        }
+    }
+};
+
+int main() {
+    StringOperations s;
+
+    string text, part;
+    char target;
+
+    cout << "Enter a sentence: ";
+    getline(cin, text);
+
+    cout << "Enter character to count: ";
+    cin >> target;
+
+    cout << "Longest word: " << s.longestWord(text) << endl;
+
+    cout << "Character frequency: "
+         << s.frequency(text, target) << endl;
+
+    cout << "Palindrome: "
+         << (s.palindrome(text) ? "Yes" : "No") << endl;
+
+    cin.ignore(10000, '\n');
+
+    cout << "Enter substring: ";
+    getline(cin, part);
+
+    cout << "Substring index: "
+         << s.substringIndex(text, part) << endl;
+
+    cout << "Word frequencies:\n";
+    s.wordFrequencies(text);
+
+    return 0;
+}
+
+
+/* ==================================================
+   4. MATRIX OPERATIONS
+   Addition, subtraction, multiplication and transpose.
+   ================================================== */
+
+#include <iostream>
+using namespace std;
+
+class MatrixOperations {
+public:
+
+    void add(int a[10][10], int b[10][10], int n) {
+        cout << "Addition:\n";
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++)
+                cout << a[i][j] + b[i][j] << " ";
+
+            cout << endl;
+        }
+    }
+
+    void subtract(int a[10][10], int b[10][10], int n) {
+        cout << "Subtraction:\n";
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++)
+                cout << a[i][j] - b[i][j] << " ";
+
+            cout << endl;
+        }
+    }
+
+    void multiply(int a[10][10], int b[10][10], int n) {
+        cout << "Multiplication:\n";
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+
+                int sum = 0;
+
+                for (int k = 0; k < n; k++)
+                    sum += a[i][k] * b[k][j];
+
+                cout << sum << " ";
+            }
+
+            cout << endl;
+        }
+    }
+
+    void transpose(int a[10][10], int n) {
+        cout << "Transpose:\n";
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++)
+                cout << a[j][i] << " ";
+
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    int n, a[10][10], b[10][10];
+
+    cout << "Enter matrix size: ";
+    cin >> n;
+
+    cout << "Enter first matrix:\n";
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            cin >> a[i][j];
+
+    cout << "Enter second matrix:\n";
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            cin >> b[i][j];
+
+    MatrixOperations m;
+
+    m.add(a, b, n);
+    m.subtract(a, b, n);
+    m.multiply(a, b, n);
+    m.transpose(a, n);
+
+    return 0;
+}
+
+
+/* ==================================================
+   5. LINEAR SEARCH AND BINARY SEARCH
+   ================================================== */
+
+#include <iostream>
+using namespace std;
+
+class Searching {
+public:
+
+    int linearSearch(int a[], int n, int key, int &comparisons) {
+        comparisons = 0;
+
+        for (int i = 0; i < n; i++) {
+            comparisons++;
+
+            if (a[i] == key)
+                return i;
+        }
+
+        return -1;
+    }
+
+    int binarySearch(int a[], int n, int key, int &comparisons) {
+        int left = 0, right = n - 1;
+        comparisons = 0;
+
+        while (left <= right) {
+
+            int mid = (left + right) / 2;
+
+            comparisons++;
+
+            if (a[mid] == key)
+                return mid;
+
+            comparisons++;
+
+            if (a[mid] < key)
+                left = mid + 1;
+            else
+                right = mid - 1;
+        }
+
+        return -1;
+    }
+
+    void sortArray(int a[], int n) {
+        for (int i = 0; i < n - 1; i++) {
+
+            for (int j = i + 1; j < n; j++) {
+
+                if (a[i] > a[j]) {
+                    int temp = a[i];
+                    a[i] = a[j];
+                    a[j] = temp;
+                }
+            }
+        }
+    }
+};
+
+int main() {
+    int n, a[100], b[100], key, comparisons;
+
+    cout << "Enter number of students: ";
+    cin >> n;
+
+    cout << "Enter roll numbers:\n";
+
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        b[i] = a[i];
+    }
+
+    cout << "Enter roll number to search: ";
+    cin >> key;
+
+    Searching s;
+
+    int pos = s.linearSearch(a, n, key, comparisons);
+
+    cout << "Linear search position: " << pos;
+    cout << "\nComparisons: " << comparisons << endl;
+
+    s.sortArray(b, n);
+
+    pos = s.binarySearch(b, n, key, comparisons);
+
+    cout << "Binary search position: " << pos;
+    cout << "\nComparisons: " << comparisons << endl;
+
+    return 0;
+}
+
+
+/* ==================================================
+   6. SELECTION SORT AND BUBBLE SORT
+   Display top five percentages.
+   ================================================== */
+
+#include <iostream>
+using namespace std;
+
+class Sorting {
+public:
+
+    void selectionSort(float a[], int n) {
+
+        for (int i = 0; i < n - 1; i++) {
+
+            int min = i;
+
+            for (int j = i + 1; j < n; j++) {
+                if (a[j] < a[min])
+                    min = j;
+            }
+
+            float temp = a[i];
+            a[i] = a[min];
+            a[min] = temp;
+        }
+    }
+
+    void bubbleSort(float a[], int n) {
+
+        for (int i = 0; i < n - 1; i++) {
+
+            for (int j = 0; j < n - i - 1; j++) {
+
+                if (a[j] > a[j + 1]) {
+                    float temp = a[j];
+                    a[j] = a[j + 1];
+                    a[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+    void displayTopFive(float a[], int n) {
+
+        for (int i = n - 1, count = 0;
+             i >= 0 && count < 5;
+             i--, count++) {
+
+            cout << a[i] << " ";
+        }
+
+        cout << endl;
+    }
+};
+
+int main() {
+    int n;
+    float a[100], b[100];
+
+    cout << "Enter number of students: ";
+    cin >> n;
+
+    cout << "Enter percentages:\n";
+
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        b[i] = a[i];
+    }
+
+    Sorting s;
+
+    s.selectionSort(a, n);
+    s.bubbleSort(b, n);
+
+    cout << "Top five using Selection Sort:\n";
+    s.displayTopFive(a, n);
+
+    cout << "Top five using Bubble Sort:\n";
+    s.displayTopFive(b, n);
+
+    return 0;
+}
+
+
+/* ==================================================
+   7. STACK: REVERSE STRING AND CHECK PALINDROME
+   ================================================== */
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class StringStack {
+public:
+
+    string reverseString(string text) {
+
+        char stack[1000];
+        int top = -1;
+
+        for (int i = 0; i < text.length(); i++)
+            stack[++top] = text[i];
+
+        string reversed = "";
+
+        while (top >= 0)
+            reversed += stack[top--];
+
+        return reversed;
+    }
+
+    bool isPalindrome(string text) {
+
+        string clean = "";
+
+        for (int i = 0; i < text.length(); i++) {
+
+            char ch = text[i];
+
+            if (ch >= 'A' && ch <= 'Z')
+                ch = ch + 32;
+
+            if ((ch >= 'a' && ch <= 'z') ||
+                (ch >= '0' && ch <= '9')) {
+
+                clean += ch;
+            }
+        }
+
+        return clean == reverseString(clean);
+    }
+};
+
+int main() {
+    string text;
+
+    cout << "Enter a string: ";
+    getline(cin, text);
+
+    StringStack s;
+
+    cout << "Original string: " << text << endl;
+    cout << "Reversed string: " << s.reverseString(text) << endl;
+
+    if (s.isPalindrome(text))
+        cout << "Palindrome";
+    else
+        cout << "Not palindrome";
+
+    return 0;
+}
+
+
+/* ==================================================
+   8. CHECK BALANCED BRACKETS USING STACK
+   ================================================== */
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class BracketStack {
+public:
+
+    bool isBalanced(string text) {
+
+        char stack[1000];
+        int top = -1;
+
+        for (int i = 0; i < text.length(); i++) {
+
+            char ch = text[i];
+
+            if (ch == '(' || ch == '{' || ch == '[') {
+                stack[++top] = ch;
+            }
+
+            else if (ch == ')' || ch == '}' || ch == ']') {
+
+                if (top == -1)
+                    return false;
+
+                char open = stack[top--];
+
+                if ((ch == ')' && open != '(') ||
+                    (ch == '}' && open != '{') ||
+                    (ch == ']' && open != '['))
+                    return false;
+            }
+        }
+
+        return top == -1;
+    }
+};
+
+int main() {
+    string text;
+
+    cout << "Enter expression: ";
+    getline(cin, text);
+
+    BracketStack b;
+
+    if (b.isBalanced(text))
+        cout << "Well parenthesized";
+    else
+        cout << "Not well parenthesized";
+
+    return 0;
+}
+
+
+/* ==================================================
+   9. JOB QUEUE USING ARRAY
+   ================================================== */
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class JobQueue {
+    string jobs[5];
+    int front, rear, count;
+
+public:
+
+    JobQueue() {
+        front = 0;
+        rear = -1;
+        count = 0;
+    }
+
+    void addJob(string name) {
+
+        if (count == 5) {
+            cout << "Queue is full\n";
+        }
+        else {
+            rear = (rear + 1) % 5;
+            jobs[rear] = name;
+            count++;
+
+            cout << "Job added\n";
+        }
+    }
+
+    void deleteJob() {
+
+        if (count == 0) {
+            cout << "Queue is empty\n";
+        }
+        else {
+            cout << "Processing: " << jobs[front] << endl;
+
+            front = (front + 1) % 5;
+            count--;
+        }
+    }
+};
+
+int main() {
+    JobQueue q;
+
+    q.addJob("Print");
+    q.addJob("Download");
+
+    q.deleteJob();
+    q.deleteJob();
+    q.deleteJob();
+
+    return 0;
+}
+
+
+/* ==================================================
+   10. PIZZA PARLOUR USING CIRCULAR QUEUE
+   ================================================== */
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class PizzaQueue {
+    string orders[5];
+    int front, rear;
+
+public:
+
+    PizzaQueue() {
+        front = -1;
+        rear = -1;
+    }
+
+    void addOrder(string order) {
+
+        if ((rear + 1) % 5 == front) {
+            cout << "Queue is full\n";
+        }
+        else {
+            if (front == -1)
+                front = rear = 0;
+            else
+                rear = (rear + 1) % 5;
+
+            orders[rear] = order;
+
+            cout << "Order added: " << order << endl;
+        }
+    }
+
+    void serveOrder() {
+
+        if (front == -1) {
+            cout << "Queue is empty\n";
+        }
+        else {
+            cout << "Order served: " << orders[front] << endl;
+
+            if (front == rear)
+                front = rear = -1;
+            else
+                front = (front + 1) % 5;
+        }
+    }
+};
+
+int main() {
+    PizzaQueue q;
+
+    q.addOrder("Margherita");
+    q.addOrder("Paneer");
+
+    q.serveOrder();
+    q.serveOrder();
+
+    return 0;
+}
+
+
+/* ==================================================
+   11. PINNACLE CLUB USING SINGLY LINKED LIST
+   ================================================== */
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class PinnacleClub {
+
+    struct Node {
+        int prn;
+        string name;
+        Node* next;
+    };
+
+    Node* head;
+
+public:
+
+    PinnacleClub() {
+        head = NULL;
+    }
+
+    void addPresident(int prn, string name) {
+
+        Node* n = new Node{prn, name, head};
+        head = n;
+    }
+
+    void addMember(int prn, string name) {
+
+        Node* n = new Node{prn, name, NULL};
+
+        if (head == NULL) {
+            head = n;
+            return;
+        }
+
+        Node* p = head;
+
+        while (p->next != NULL && p->next->next != NULL)
+            p = p->next;
+
+        n->next = p->next;
+        p->next = n;
+    }
+
+    void addSecretary(int prn, string name) {
+
+        Node* n = new Node{prn, name, NULL};
+
+        if (head == NULL) {
+            head = n;
+            return;
+        }
+
+        Node* p = head;
+
+        while (p->next != NULL)
+            p = p->next;
+
+        p->next = n;
+    }
+
+    void deletePresident() {
+
+        if (head == NULL)
+            return;
+
+        Node* temp = head;
+        head = head->next;
+
+        delete temp;
+    }
+
+    void deleteMember(int prn) {
+
+        if (head == NULL)
+            return;
+
+        Node* p = head;
+
+        while (p->next != NULL && p->next->prn != prn)
+            p = p->next;
+
+        if (p->next != NULL) {
+
+            Node* temp = p->next;
+            p->next = temp->next;
+
+            delete temp;
+        }
+    }
+
+    void deleteSecretary() {
+
+        if (head == NULL)
+            return;
+
+        if (head->next == NULL) {
+            deletePresident();
+            return;
+        }
+
+        Node* p = head;
+
+        while (p->next->next != NULL)
+            p = p->next;
+
+        delete p->next;
+        p->next = NULL;
+    }
+
+    int countMembers() {
+
+        int count = 0;
+        Node* p = head;
+
+        while (p != NULL) {
+            count++;
+            p = p->next;
+        }
+
+        return count;
+    }
+
+    void display() {
+
+        Node* p = head;
+
+        while (p != NULL) {
+            cout << p->prn << " " << p->name << endl;
+            p = p->next;
+        }
+    }
+
+    void concatenate(PinnacleClub &second) {
+
+        if (head == NULL) {
+            head = second.head;
+            second.head = NULL;
+            return;
+        }
+
+        Node* p = head;
+
+        while (p->next != NULL)
+            p = p->next;
+
+        p->next = second.head;
+        second.head = NULL;
+    }
+};
+
+int main() {
+
+    PinnacleClub first, second;
+
+    first.addPresident(1, "Asha");
+    first.addMember(2, "Ravi");
+    first.addSecretary(3, "Mina");
+
+    second.addPresident(4, "Jay");
+    second.addSecretary(5, "Neha");
+
+    first.concatenate(second);
+
+    cout << "Club members:\n";
+    first.display();
+
+    cout << "Total members: " << first.countMembers();
+
+    return 0;
+}
+
+
+/* ==================================================
+   12. QUICK SORT
+   Sort floating-point percentages and display top five.
+   ================================================== */
+
+#include <iostream>
+using namespace std;
+
+class QuickSort {
+public:
+
+    void swapNumbers(float &a, float &b) {
+
+        float temp = a;
+        a = b;
+        b = temp;
+    }
+
+    int partition(float a[], int low, int high) {
+
+        float pivot = a[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+
+            if (a[j] < pivot) {
+                i++;
+                swapNumbers(a[i], a[j]);
+            }
+        }
+
+        swapNumbers(a[i + 1], a[high]);
+
+        return i + 1;
+    }
+
+    void quickSort(float a[], int low, int high) {
+
+        if (low < high) {
+
+            int pivotPosition = partition(a, low, high);
+
+            quickSort(a, low, pivotPosition - 1);
+            quickSort(a, pivotPosition + 1, high);
+        }
+    }
+
+    void displayTopFive(float a[], int n) {
+
+        cout << "Top five scores: ";
+
+        for (int i = n - 1, count = 0;
+             i >= 0 && count < 5;
+             i--, count++) {
+
+            cout << a[i] << " ";
+        }
+
+        cout << endl;
+    }
+};
+
+int main() {
+
+    int n;
+    float a[100];
+
+    cout << "Enter number of students: ";
+    cin >> n;
+
+    cout << "Enter percentages:\n";
+
+    for (int i = 0; i < n; i++)
+        cin >> a[i];
+
+    QuickSort q;
+
+    q.quickSort(a, 0, n - 1);
+    q.displayTopFive(a, n);
+
+    return 0;
+}
+
+
+/* ==================================================
+   13. ICE-CREAM STUDENT SETS USING LINKED LIST
+   Intersection, symmetric difference and neither.
+   ================================================== */
+
+#include <iostream>
+using namespace std;
+
+class IceCreamSets {
+
+    struct Node {
+        int roll;
+        Node* next;
+    };
+
+    Node* head;
+
+public:
+
+    IceCreamSets() {
+        head = NULL;
+    }
+
+    bool contains(int roll) {
+
+        Node* current = head;
+
+        while (current != NULL) {
+
+            if (current->roll == roll)
+                return true;
+
+            current = current->next;
+        }
+
+        return false;
+    }
+
+    void add(int roll) {
+
+        if (contains(roll))
+            return;
+
+        Node* newNode = new Node;
+
+        newNode->roll = roll;
+        newNode->next = NULL;
+
+        if (head == NULL) {
+            head = newNode;
+        }
+        else {
+
+            Node* current = head;
+
+            while (current->next != NULL)
+                current = current->next;
+
+            current->next = newNode;
+        }
+    }
+
+    int size() {
+
+        int count = 0;
+        Node* current = head;
+
+        while (current != NULL) {
+            count++;
+            current = current->next;
+        }
+
+        return count;
+    }
+
+    void display() {
+
+        Node* current = head;
+
+        if (current == NULL) {
+            cout << "None";
+            return;
+        }
+
+        while (current != NULL) {
+            cout << current->roll << " ";
+            current = current->next;
+        }
+    }
+
+    void intersection(IceCreamSets &other, IceCreamSets &result) {
+
+        Node* current = head;
+
+        while (current != NULL) {
+
+            if (other.contains(current->roll))
+                result.add(current->roll);
+
+            current = current->next;
+        }
+    }
+
+    void unionSet(IceCreamSets &other, IceCreamSets &result) {
+
+        Node* current = head;
+
+        while (current != NULL) {
+            result.add(current->roll);
+            current = current->next;
+        }
+
+        current = other.head;
+
+        while (current != NULL) {
+            result.add(current->roll);
+            current = current->next;
+        }
+    }
+
+    void eitherButNotBoth(IceCreamSets &other, IceCreamSets &result) {
+
+        Node* current = head;
+
+        while (current != NULL) {
+
+            if (!other.contains(current->roll))
+                result.add(current->roll);
+
+            current = current->next;
+        }
+
+        current = other.head;
+
+        while (current != NULL) {
+
+            if (!contains(current->roll))
+                result.add(current->roll);
+
+            current = current->next;
+        }
+    }
+};
+
+int main() {
+
+    int total, n, roll;
+
+    IceCreamSets vanilla;
+    IceCreamSets butterscotch;
+    IceCreamSets both;
+    IceCreamSets either;
+    IceCreamSets all;
+
+    cout << "Enter total number of students: ";
+    cin >> total;
+
+    cout << "Enter number of vanilla students: ";
+    cin >> n;
+
+    cout << "Enter roll numbers:\n";
+
+    for (int i = 0; i < n; i++) {
+        cin >> roll;
+        vanilla.add(roll);
+    }
+
+    cout << "Enter number of butterscotch students: ";
+    cin >> n;
+
+    cout << "Enter roll numbers:\n";
+
+    for (int i = 0; i < n; i++) {
+        cin >> roll;
+        butterscotch.add(roll);
+    }
+
+    vanilla.intersection(butterscotch, both);
+
+    vanilla.eitherButNotBoth(butterscotch, either);
+
+    vanilla.unionSet(butterscotch, all);
+
+    cout << "Students who like both: ";
+    both.display();
+    cout << endl;
+
+    cout << "Students who like either but not both: ";
+    either.display();
+    cout << endl;
+
+    cout << "Students who like neither: "
+         << total - all.size() << endl;
+
+    return 0;
+}
+
+
+/* ==================================================
+   END OF 13 DSA PRACTICAL PROGRAMS
+   ================================================== */
